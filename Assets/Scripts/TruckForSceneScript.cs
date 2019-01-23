@@ -1,19 +1,20 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class TruckWithLiftForSceneScript : MonoBehaviour
+public class TruckForSceneScript : MonoBehaviour
 {
     private GameObject Car;
     private GameObject CurrentCarLifter;
 
     public GameObject Lifter;
 
-    public GameObject[] CurrentCarWheels = new GameObject[] {null, null , null , null };
-    public GameObject[] Wheels ;
+    public GameObject[] CurrentCarWheels = new GameObject[] { null, null, null, null };
+    public GameObject[] Wheels;
 
-    private string[] WheelsNames = new string[] {"BR","BL","FL","FR" };
+    private string[] WheelsNames = new string[] { "BR", "BL", "FL", "FR" };
 
-    public bool Kostil =true;
+    public bool Kostil = true;
     // Use this for initialization
     private void OnEnable()
     {
@@ -26,11 +27,11 @@ public class TruckWithLiftForSceneScript : MonoBehaviour
     {
 
 
-       
+
     }
 
 
-    
+
 
     void FixedUpdate()
     {
@@ -48,7 +49,7 @@ public class TruckWithLiftForSceneScript : MonoBehaviour
             i = 0;
             Kostil = false;
         }
-        for(int i=0; i<4; i++)
+        for (int i = 0; i < 4; i++)
         {
             Wheels[i].transform.localRotation = CurrentCarWheels[i].transform.localRotation;
             Wheels[i].transform.Rotate(15, 0, 0);
@@ -83,5 +84,4 @@ public class TruckWithLiftForSceneScript : MonoBehaviour
             return null;
         }
     }
-
 }

@@ -1,7 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Controller : MonoBehaviour
+public class JustTruckController : MonoBehaviour
 {
     private GameObject CurrentCamera;
     public GameObject NextCamera;
@@ -38,7 +39,7 @@ public class Controller : MonoBehaviour
         public Transform wheelTransform; //4
         public WheelCollider col; //5
         public Vector3 wheelStartPos; //6 
-        public float rotation = 0.0f;  
+        public float rotation = 0.0f;
     }
 
     protected WheelData[] wheels; //8
@@ -48,39 +49,39 @@ public class Controller : MonoBehaviour
     {
         LifterRotarion = 0.0f;
         CurrentCamera = GameObject.Find("MainCamera");
-      
-        GetComponent<Rigidbody>().centerOfMass = COM.localPosition;
 
-        wheels = new WheelData[WColForward.Length + WColBack.Length]; 
+        
+
+        wheels = new WheelData[WColForward.Length + WColBack.Length];
 
         for (int i = 0; i < WColForward.Length; i++)
-        { 
-            wheels[i] = SetupWheels(wheelsF[i], WColForward[i]); 
+        {
+            wheels[i] = SetupWheels(wheelsF[i], WColForward[i]);
         }
 
         for (int i = 0; i < WColBack.Length; i++)
-        { 
+        {
             wheels[i + WColForward.Length] = SetupWheels(wheelsB[i], WColBack[i]);
         }
-
+        GetComponent<Rigidbody>().centerOfMass = COM.localPosition;
     }
 
 
     private WheelData SetupWheels(Transform wheel, WheelCollider col)
-    { 
+    {
         WheelData result = new WheelData();
 
         result.wheelTransform = wheel;
-        result.col = col; 
-        result.wheelStartPos = wheel.transform.localPosition; 
+        result.col = col;
+        result.wheelStartPos = wheel.transform.localPosition;
 
-        return result; 
+        return result;
 
     }
 
     void FixedUpdate()
     {
-        
+
         float accel = 0;
         float steer = 0;
 
@@ -97,7 +98,7 @@ public class Controller : MonoBehaviour
 
 
     private void UpdateWheels()
-    { 
+    {
         float delta = Time.fixedDeltaTime;
 
 
@@ -155,7 +156,7 @@ public class Controller : MonoBehaviour
 
         GameObject.Find("InfoMenu").GetComponent<InfoMenuController>().CurrentCar = gameObject;
         GameObject.Find("InfoMenu").GetComponent<InfoMenuController>().CurrentCarName = gameObject.name;
-        GameObject.Find("InfoMenu").GetComponent<InfoMenuController>().TypeOfCar = 0;
+        GameObject.Find("InfoMenu").GetComponent<InfoMenuController>().TypeOfCar = 1;
 
 
 
@@ -163,8 +164,8 @@ public class Controller : MonoBehaviour
 
     private void LifterAnimation(float Rotation)
     {
-       
-        if ((Rotation <= 5.0f) && (Rotation >= -40.0f))
+
+        if ((Rotation <= 0.0f) && (Rotation >= -20.0f))
         {
             Lifter.transform.localRotation = Quaternion.Euler(Rotation, 0.0f, 0.0f);
             if (GameObject.Find("InfoMenu") != null)
@@ -174,16 +175,16 @@ public class Controller : MonoBehaviour
         }
         else
         {
-            if (Rotation>5.0f)
+            if (Rotation > 0.0f)
             {
                 LifterRotarion = 5.0f;
             }
             else
             {
-                LifterRotarion = -40.0f;
+                LifterRotarion = -20.0f;
             }
         }
-        
+
     }
 
     private void LifterButtons()
