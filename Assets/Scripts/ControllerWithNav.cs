@@ -134,7 +134,7 @@ public class ControllerWithNav : MonoBehaviour
    
     private void CarMoveWithNav(float accel, float steer,Vector3 Direction,Vector3 OY)
     {
-        if (Direction.magnitude > 10) { accel = 1; }
+        if (Direction.magnitude > 13) { accel = 1; }
         else { accel = 0; }
         MiddleAngle = Vector3.SignedAngle(Direction, OY, Axis);
         MiddleAngle = -MiddleAngle;
