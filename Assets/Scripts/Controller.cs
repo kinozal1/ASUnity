@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Controller : MonoBehaviour
 {
-    private GameObject CurrentCamera;
+    public GameObject CurrentCamera;
     public GameObject NextCamera;
 
     public GameObject Lifter;
@@ -27,8 +27,7 @@ public class Controller : MonoBehaviour
 
     private void Awake()
     {
-        CurrentCamera = GameObject.Find("MainCamera");
-        NextCamera = GameObject.Find("Camera");
+
 
     }
 
@@ -47,7 +46,7 @@ public class Controller : MonoBehaviour
     void Start()
     {
         LifterRotarion = 0.0f;
-        CurrentCamera = GameObject.Find("MainCamera");
+   
       
         GetComponent<Rigidbody>().centerOfMass = COM.localPosition;
 

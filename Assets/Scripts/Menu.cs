@@ -8,7 +8,7 @@ public class Menu : MonoBehaviour
 {
     public void PlayPressed()
     {
-        SceneManager.LoadScene("Map");
+        SceneManager.LoadScene("SecondScene");
     }
     public void ExitPressed()
     {

@@ -9,6 +9,7 @@ public class InfoMenuController : MonoBehaviour
     public GameObject JustTruck;
 
     public GameObject CurrentCar;
+    public GameObject Point;
 
 
     public int TypeOfCar;
@@ -17,11 +18,12 @@ public class InfoMenuController : MonoBehaviour
 
 
     public string CurrentCarName;
-    private float OX, OY, OZ;
+    public float OX, OY, OZ;
     public float RPM,AngleOfLifter;
 
     public GameObject CurrentCamera;
     public GameObject NextCamera;
+
     public bool Kostil = true;
     public Text TextBar1;
     public Text TextBar2;
@@ -37,8 +39,7 @@ public class InfoMenuController : MonoBehaviour
     
     private void Awake()
     {
-        CurrentCamera = GameObject.Find("Camera");
-        NextCamera = GameObject.Find("MainCamera");
+
 
     }
     void Start()
@@ -58,7 +59,7 @@ public class InfoMenuController : MonoBehaviour
             Types[TypeOfCar].SetActive(true);
             Kostil = false;
         }
-       // Можно сделать передачу всех типов показателей из контроллера 
+
         OX = CurrentCar.transform.position.x;
         OY = CurrentCar.transform.position.y;
         OZ = CurrentCar.transform.position.z;

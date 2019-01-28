@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ControllerWithNav : MonoBehaviour
 {
-    private GameObject CurrentCamera;
+    public GameObject CurrentCamera;
     public GameObject NextCamera;
     public GameObject AgentTarget;
     public GameObject Lifter;
@@ -44,8 +44,7 @@ public class ControllerWithNav : MonoBehaviour
 
     private void Awake()
     {
-        CurrentCamera = GameObject.Find("MainCamera");
-        NextCamera = GameObject.Find("Camera");
+   
 
     }
 
@@ -64,7 +63,7 @@ public class ControllerWithNav : MonoBehaviour
     void Start()
     {
         LifterRotarion = 0.0f;
-        CurrentCamera = GameObject.Find("MainCamera");
+
 
         GetComponent<Rigidbody>().centerOfMass = COM.localPosition;
 
