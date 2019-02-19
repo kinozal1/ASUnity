@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &453126613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3619818127761963369}
+  - component: {fileID: 1477771998088022909}
+  m_Layer: 0
+  m_Name: PointForCar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3619818127761963369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453126613}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 68.06, y: -0.11, z: 58.74}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1477771998088022909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453126613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05147c956bf56bc41b8de198754635e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unityCof: 0
+  RealCofForZ: 0
+  RealCofForX: 0
+  RealOX: 0
+  RealOZ: 0
+  RealOXO1: 0
+  RealOXO2: 0
+  RealOZO1: 0
+  RealOZO2: 0
+  FinalCoordX: 0
+  FinalCoordZ: 0
+  Vec: {x: 0, y: 0, z: 0}
+  OX: 0
+  OY: 0
+  OZ: 0
+  TestOX: 0
