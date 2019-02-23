@@ -8,9 +8,9 @@ public class AgentPoint : MonoBehaviour
     public float OX, OY, OZ;
     void Update()
     {
-        GameObject.Find("Point").GetComponent<UDPClient1>().OXfloat = OX;
-        GameObject.Find("Point").GetComponent<UDPClient1>().OYfloat = OY;
-        GameObject.Find("Point").GetComponent<UDPClient1>().OZfloat = OZ;
+        //GameObject.Find("Point").GetComponent<UDPClient1>().Info1 = OX;
+        //GameObject.Find("Point").GetComponent<UDPClient1>().Info2 = OY;
+        //GameObject.Find("Point").GetComponent<UDPClient1>().Info3 = OZ;
 
         Ray ray = new Ray(transform.position, -transform.up);
             

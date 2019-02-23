@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class WayPointCar : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class WayPointCar : MonoBehaviour
     public GameObject Anchor;
     public GameObject CurrentWaypoint;
     public int IndexOfWaypoint=0;
-
+    public NavMeshAgent agent;
     public GameObject CurrentCamera;
     public GameObject NextCamera; 
 
@@ -103,13 +104,22 @@ public class WayPointCar : MonoBehaviour
         
         Vector3 OY = (Anchor.transform.position - transform.position).normalized;
         Vector3 directionToTarget = (CurrentWaypoint.transform.position - transform.position);
-       
         Lenght = directionToTarget.magnitude;
 
         float accel = 0;
         float steer = 0;
         CarMoveWithNav(accel, steer, directionToTarget, OY);
         UpdateWheels(); //11
+       if (directionToTarget.magnitude>4.5f)
+        {
+            CurrentWaypoint.GetComponent<NavMeshAgent>().isStopped=true;
+
+        }
+        else
+        {
+            CurrentWaypoint.GetComponent<NavMeshAgent>().isStopped = false;
+        }
+        
 
 
     }
@@ -120,9 +130,17 @@ public class WayPointCar : MonoBehaviour
         float delta = Time.fixedDeltaTime;
         foreach (WheelData w in wheels)
         {
-
+            
             w.rotation = Mathf.Repeat(w.rotation + delta * w.col.rpm * 360.0f / 60.0f, 360.0f); //20
-            w.wheelTransform.localRotation = Quaternion.Euler(w.rotation, w.col.steerAngle, 0.0f); //21
+            if (w.col.steerAngle<8 && w.col.steerAngle > -8)
+            {
+                w.wheelTransform.localRotation = Quaternion.Euler(w.rotation, 0, 0.0f); //21
+            }
+            else
+            {
+                w.wheelTransform.localRotation = Quaternion.Euler(w.rotation, w.col.steerAngle, 0.0f); //21
+            }
+            
             if (GameObject.Find("InfoMenu") != null)
             {
                 GameObject.Find("InfoMenu").GetComponent<InfoMenuController>().RPM = w.col.rpm;
@@ -154,8 +172,12 @@ public class WayPointCar : MonoBehaviour
 
 
 
-        if ((MiddleAngle >= 90) || (MiddleAngle < -90))
+        if ((MiddleAngle >= 90) || (MiddleAngle <= -90))
         {
+            if (MiddleAngle>165 && MiddleAngle<-165)
+            {
+                MiddleAngle = 0;
+            }
             accel = -accel;
         }
 
@@ -163,10 +185,11 @@ public class WayPointCar : MonoBehaviour
         {
             MiddleAngle = maxSteer;
         }
-        if (MiddleAngle < -maxSteer)
+        else if (MiddleAngle < -maxSteer)
         {
             MiddleAngle = -maxSteer;
         }
+
 
 
         foreach (WheelCollider col in WColForward)
@@ -208,9 +231,9 @@ public class WayPointCar : MonoBehaviour
     private void OnMouseUpAsButton()
     {
 
-
-        CurrentCamera.SetActive(false);
         NextCamera.SetActive(true);
+        CurrentCamera.SetActive(false);
+        
 
         GameObject.Find("InfoMenu").GetComponent<InfoMenuController>().CurrentCar = gameObject;
         GameObject.Find("InfoMenu").GetComponent<InfoMenuController>().CurrentCarName = gameObject.name;
