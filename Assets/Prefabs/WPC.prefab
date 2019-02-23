@@ -120,6 +120,7 @@ MonoBehaviour:
   Anchor: {fileID: 6978513367343175144}
   CurrentWaypoint: {fileID: 0}
   IndexOfWaypoint: 0
+  agent: {fileID: 0}
   CurrentCamera: {fileID: 0}
   NextCamera: {fileID: 0}
   WColForward:
@@ -136,9 +137,9 @@ MonoBehaviour:
   - {fileID: 5097513226771450162}
   wheelOffset: 0.1
   wheelRadius: 0.13
-  maxSteer: 40
-  maxAccel: 5000
-  maxBrake: 500000
+  maxSteer: 30
+  maxAccel: 1500
+  maxBrake: 3000
   one: 50
   two: 50
   three: 50
@@ -587,16 +588,16 @@ WheelCollider:
   m_Mass: 100
   m_WheelDampingRate: 3
   m_ForwardFriction:
-    m_ExtremumSlip: 0.4
-    m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
-    m_AsymptoteValue: 0.5
+    m_ExtremumSlip: 1
+    m_ExtremumValue: 2
+    m_AsymptoteSlip: 2
+    m_AsymptoteValue: 1.7
     m_Stiffness: 1
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.2
-    m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.5
-    m_AsymptoteValue: 0.75
+    m_ExtremumSlip: 1
+    m_ExtremumValue: 3
+    m_AsymptoteSlip: 2
+    m_AsymptoteValue: 1
     m_Stiffness: 1
   m_Enabled: 1
 --- !u!1 &6362083345447479764

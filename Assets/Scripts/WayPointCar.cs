@@ -12,8 +12,8 @@ public class WayPointCar : MonoBehaviour
     public int IndexOfWaypoint=0;
     public NavMeshAgent agent;
     public GameObject CurrentCamera;
-    public GameObject NextCamera; 
-
+    public GameObject NextCamera;
+    public bool Back7;
     public WheelCollider[] WColForward;
     public WheelCollider[] WColBack;
 
@@ -110,7 +110,7 @@ public class WayPointCar : MonoBehaviour
         float steer = 0;
         CarMoveWithNav(accel, steer, directionToTarget, OY);
         UpdateWheels(); //11
-       if (directionToTarget.magnitude>4.5f)
+       if (directionToTarget.magnitude>6.5f)
         {
             CurrentWaypoint.GetComponent<NavMeshAgent>().isStopped=true;
 
@@ -133,6 +133,10 @@ public class WayPointCar : MonoBehaviour
             
             w.rotation = Mathf.Repeat(w.rotation + delta * w.col.rpm * 360.0f / 60.0f, 360.0f); //20
             if (w.col.steerAngle<8 && w.col.steerAngle > -8)
+            {
+                w.wheelTransform.localRotation = Quaternion.Euler(w.rotation, 0, 0.0f); //21
+            }
+            else if(Back7)
             {
                 w.wheelTransform.localRotation = Quaternion.Euler(w.rotation, 0, 0.0f); //21
             }
@@ -174,18 +178,20 @@ public class WayPointCar : MonoBehaviour
 
         if ((MiddleAngle >= 90) || (MiddleAngle <= -90))
         {
-            if (MiddleAngle>165 && MiddleAngle<-165)
-            {
-                MiddleAngle = 0;
-            }
+            Back7 = true;
             accel = -accel;
         }
+        else
+        {
+            Back7 = false;
+        }
+
 
         if (MiddleAngle >= maxSteer)
         {
             MiddleAngle = maxSteer;
         }
-        else if (MiddleAngle < -maxSteer)
+        else if (MiddleAngle <= -maxSteer)
         {
             MiddleAngle = -maxSteer;
         }
@@ -194,8 +200,14 @@ public class WayPointCar : MonoBehaviour
 
         foreach (WheelCollider col in WColForward)
         {
-
-            col.steerAngle = MiddleAngle;
+            if (Back7)
+            {
+                col.steerAngle = 0;
+            }
+            else
+            {
+                col.steerAngle = MiddleAngle;
+            }
 
         }
 

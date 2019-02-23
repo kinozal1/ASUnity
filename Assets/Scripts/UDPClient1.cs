@@ -42,6 +42,7 @@ public class UDPClient1 : MonoBehaviour
             Info5 = float.Parse(splitted[11]);
         }
     } // Вся информация о машине
+
     List<CarData> CarDataList; // Информация о всех машинах 
     List<GameObject> CarList; // Машины на карте
     List<NavMeshAgent> AgentPointList; // НавМешАгенты машин
