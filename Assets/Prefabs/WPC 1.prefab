@@ -803,6 +803,10 @@ Transform:
   - {fileID: 1469403369}
   - {fileID: 1319734707}
   - {fileID: 1132098233}
+  - {fileID: 7485767542512140048}
+  - {fileID: 7522973962322834192}
+  - {fileID: 3010344607477527317}
+  - {fileID: 2298303303168346672}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0.42900002, y: 71.725006, z: 0.633}
@@ -883,16 +887,25 @@ MonoBehaviour:
   - {fileID: 0}
   Anchor: {fileID: 1132098232}
   CurrentWaypoint: {fileID: 0}
-  IndexOfWaypoint: 0
+  exceptionAction: 0
   agent: {fileID: 0}
   CurrentCamera: {fileID: 0}
   NextCamera: {fileID: 0}
+  Back7: 0
+  TriggerForOptionToMove: 0
+  DistanceForForwardLidars: 3
+  DistanceForSideLidars: 3
+  DistanceForNormalMove: 4
   WColForward:
   - {fileID: 1477688234}
   - {fileID: 959746921}
   WColBack:
   - {fileID: 1467447823}
   - {fileID: 412838016}
+  LFLidar: {fileID: 6720992393332877452}
+  RFLidar: {fileID: 8724973410270839645}
+  LeftLidar: {fileID: 8347415682548456494}
+  RightLidar: {fileID: 485165105385067001}
   wheelsF:
   - {fileID: 2045233454}
   - {fileID: 2082622393}
@@ -905,10 +918,8 @@ MonoBehaviour:
   maxAccel: 1500
   maxBrake: 3000
   one: 50
-  two: 50
-  three: 50
-  four: 50
   Lenght: 0
+  Immitsteer: 0
   MiddleAngle: 0
   OY: {x: 0, y: 0, z: 0}
   Axis: {x: 0, y: 1, z: 0}
@@ -1100,3 +1111,123 @@ WheelCollider:
     m_AsymptoteValue: 0.75
     m_Stiffness: 1
   m_Enabled: 0
+--- !u!1 &485165105385067001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2298303303168346672}
+  m_Layer: 0
+  m_Name: RightLidar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2298303303168346672
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485165105385067001}
+  m_LocalRotation: {x: 0, y: 0.2588191, z: 0, w: 0.9659258}
+  m_LocalPosition: {x: 0.22400038, y: 0.42000005, z: 0.3700002}
+  m_LocalScale: {x: 0.20000002, y: 0.2, z: 0.20000003}
+  m_Children: []
+  m_Father: {fileID: 1895981619}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 30, z: 0}
+--- !u!1 &6720992393332877452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7522973962322834192}
+  m_Layer: 0
+  m_Name: LFLidar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7522973962322834192
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6720992393332877452}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.397, y: 0.42, z: 0.37}
+  m_LocalScale: {x: 0.20000002, y: 0.2, z: 0.20000003}
+  m_Children: []
+  m_Father: {fileID: 1895981619}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8347415682548456494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3010344607477527317}
+  m_Layer: 0
+  m_Name: LeftLidar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3010344607477527317
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8347415682548456494}
+  m_LocalRotation: {x: 0, y: -0.258819, z: 0, w: 0.9659259}
+  m_LocalPosition: {x: -0.39700064, y: 0.42000005, z: 0.37000042}
+  m_LocalScale: {x: 0.20000002, y: 0.2, z: 0.20000003}
+  m_Children: []
+  m_Father: {fileID: 1895981619}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: -30, z: 0}
+--- !u!1 &8724973410270839645
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7485767542512140048}
+  m_Layer: 0
+  m_Name: RFLidar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7485767542512140048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8724973410270839645}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.224, y: 0.42, z: 0.37}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_Children: []
+  m_Father: {fileID: 1895981619}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

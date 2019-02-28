@@ -11,11 +11,14 @@ using System.Threading;
 
 public class UDPClient1 : MonoBehaviour
 {
-    public GameObject TargetPointPrefab, CarPrefab; //Префабы для ТочкиСледования, Машины
+    public GameObject TargetPointPrefab, CarPrefab,AgentPrefab; //Префабы для ТочкиСледования, Машины
     public float unityCof,RealCof;
 
+    public GameObject CurrentCamera;
+    public GameObject NextCamera;
 
-
+    public GameObject NavMeshSurf;
+    public GameObject PresentScript;
 
     public struct CarData 
     {
@@ -28,7 +31,7 @@ public class UDPClient1 : MonoBehaviour
 
         public CarData(string[] splitted)
         {
-            CarID = int.Parse(splitted[0]);
+            CarID = int.Parse(splitted[0])-1;
             OX = float.Parse(splitted[1]);
             OY = float.Parse(splitted[2]);
             OZ = float.Parse(splitted[3]);
@@ -43,14 +46,14 @@ public class UDPClient1 : MonoBehaviour
         }
     } // Вся информация о машине
 
-    List<CarData> CarDataList; // Информация о всех машинах 
-    List<GameObject> CarList; // Машины на карте
-    List<NavMeshAgent> AgentPointList; // НавМешАгенты машин
-    List<GameObject> TargetPointList; // ТочкиСледования для НавМеш
+   
+    public List<GameObject> CarList = new List<GameObject>(0); // Машины на карте
+    public List<GameObject> AgentPointList = new List<GameObject>(0); // НавМешАгенты машин
+    public List<GameObject> TargetPointList = new List<GameObject>(0); // ТочкиСледования для НавМеш
+    public List<CarData> CarDataList = new List<CarData>(0);  // Информация о всех машинах 
 
 
-    
-
+    public string TestString;
 
     public DateTime Time1, Time2;
 
@@ -101,44 +104,80 @@ public class UDPClient1 : MonoBehaviour
 
 	void Update ()
 	{
+        received = TestString;
 
-		if (received != ""){
+        if ((received != "")){
+
             string[] splitted = received.Split(new string[] { "," }, StringSplitOptions.None);
             CarID = Int32.Parse(splitted[0]);
-
-            if (CarID<CarDataList.Count)
+            
+            if (CarID>CarDataList.Count)
                 {
+                CarID--;
                 RaycastHit hit;
                 CarData CurrentCarData = new CarData(splitted);
-                RealCoords(unityCof, RealCof, ref CurrentCarData.OX, ref CurrentCarData.OZ); //Подстройка координат
+                
+                RealCoords(unityCof, RealCof, ref CurrentCarData.OX, ref CurrentCarData.OZ); //Подстройка координат 
                 CarDataList.Add(CurrentCarData);
 
-                TargetPointList.Add(Instantiate(TargetPointPrefab)); // Добавление ТочкиСледования
-                TargetPointList[CarID].transform.position = new Vector3(CurrentCarData.OX, 200, CurrentCarData.OZ); // Перемещение точки в координату из строки
-                if (Physics.Raycast(TargetPointList[CarID].transform.position, -TargetPointList[CarID].transform.up, out hit)) //Проверка, есть ли точка на карте 
+                TargetPointList.Add(Instantiate(TargetPointPrefab, new Vector3(CurrentCarData.OX, 250, CurrentCarData.OZ), Quaternion.Euler(0, 0, 0))); // Добавление ТочкиСледования
+                if (((Physics.Raycast(TargetPointList[CarID].transform.position, -TargetPointList[CarID].transform.up, out hit)))) //Проверка, есть ли точка на карте 
                 {
+
+                    AgentPointList.Add(Instantiate(AgentPrefab, hit.point, Quaternion.Euler(hit.normal)));
+
+                    AgentPointList[CarID].GetComponent<NavMeshAgent>().Warp(hit.point);
+                    Debug.Log(hit.point);
                     TargetPointList[CarID].transform.position = hit.point; // Перемещние точки в координату, находящуюся на карте
-                    NavMeshAgent Agent = new NavMeshAgent();
-                    AgentPointList.Add(Agent); // Добавление агента в лист 
 
-                    Instantiate(Agent, TargetPointList[CarID].transform.position, TargetPointList[CarID].transform.rotation); // Добавление агента на карту в координаты точки
-                    CarList[CarID].GetComponent<WayPointCar>().CurrentWaypoint = Agent.gameObject; // Привязка агента к машине
-                    AgentPointList[CarID].SetDestination(TargetPointList[CarID].transform.position); // Привязка агента к точке
 
-                    CarList.Add(Instantiate(CarPrefab, TargetPointList[CarID].transform.position, TargetPointList[CarID].transform.rotation)); //Добавление машины на карту
+                    // Добавление агента на карту в координаты точки
+                    CarList.Add(Instantiate(CarPrefab, new Vector3(AgentPointList[CarID].transform.position.x, AgentPointList[CarID].transform.position.y + 5, AgentPointList[CarID].transform.position.z), AgentPointList[CarID].transform.rotation)); //Добавление машины на карту
+
+                    CarList[CarID].GetComponent<WayPointCar>().CurrentWaypoint = AgentPointList[CarID].gameObject; // Привязка агента к машине
+                    CarList[CarID].GetComponent<WayPointCar>().CurrentCamera = CurrentCamera;
+                    CarList[CarID].GetComponent<WayPointCar>().NextCamera = NextCamera;
+
+
+                    PresentScript.GetComponent<PresentScript>().Camera1 = CarList[CarID].transform.Find("CarCamera").gameObject;
+
+
+
+
                 } // Добавление новых машин, их агентов, точек
             }
             else
             {
-                
+                CarID--;
                 CarData CurrentCarData = new CarData(splitted);
+                RealCoords(unityCof, RealCof, ref CurrentCarData.OX, ref CurrentCarData.OZ);
+              
+
                 CarDataList[CarID] = CurrentCarData;
                 RaycastHit hit;
+                TargetPointList[CarID].transform.position = new Vector3(CurrentCarData.OX, 200, CurrentCarData.OZ);
                 if (Physics.Raycast(TargetPointList[CarID].transform.position, -TargetPointList[CarID].transform.up, out hit))  //Проверка, есть ли точка на карте 
                 {
+                   
                     TargetPointList[CarID].transform.position = hit.point; // Перемещние точки в координату, находящуюся на карте
-                    AgentPointList[CarID].SetDestination(TargetPointList[CarID].transform.position); // Переключение пути агента к точке
+                   // AgentPointList[CarID].GetComponent<NavMeshAgent>().SetDestination(TargetPointList[CarID].transform.position); // Переключение пути агента к точке
                 }
+
+                PresentScript.GetComponent<PresentScript>().X = CarList[CarID].transform.position.x;
+                PresentScript.GetComponent<PresentScript>().Y = CarList[CarID].transform.position.y;
+                PresentScript.GetComponent<PresentScript>().Z = CarList[CarID].transform.position.z;
+                PresentScript.GetComponent<PresentScript>().Info1 = CarList[CarID].GetComponent<WayPointCar>().LFLidarDistance;
+                PresentScript.GetComponent<PresentScript>().Info2 = CarList[CarID].GetComponent<WayPointCar>().LeftLidarDistance;
+                PresentScript.GetComponent<PresentScript>().Info3 = CarList[CarID].GetComponent<WayPointCar>().RFLidarDistance;
+                PresentScript.GetComponent<PresentScript>().Info4 = CarList[CarID].GetComponent<WayPointCar>().RFLidarDistance;
+                PresentScript.GetComponent<PresentScript>().Info5 = CarList[CarID].GetComponent<WayPointCar>().one;
+
+                AgentPointList[CarID].GetComponent<NavMeshAgentPoint>().cam = CurrentCamera.GetComponent<Camera>();
+
+
+
+
+
 
             } // Обновление данных о машинах и их точек следования
             
@@ -213,8 +252,13 @@ public class UDPClient1 : MonoBehaviour
 
     public void RealCoords(float unityCof,float RealCofFor,ref float RealOX,ref float RealOZ)
     {
-        RealOX = (RealCofFor * (unityCof)) + 40;
-        RealOZ = (RealCofFor * (unityCof)) + 40;
+        RealOX = (RealOX / (unityCof)) + 40;
+        RealOZ = (RealOZ / (unityCof)) + 40;
+    }
+
+    public void DebugString(ref string[] splitted,string StringForDebug)
+    {
+        splitted = StringForDebug.Split(' ');
     }
 		
 }

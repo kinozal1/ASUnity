@@ -11,7 +11,7 @@ public class NavMeshAgentPoint : MonoBehaviour
     public float Angle;
 
     public NavMeshAgent agent;
-    public GameObject[] Obstacle;
+    public GameObject Obstacle;
     public GameObject PointForSearch;
     public GameObject Anchor;
 
@@ -69,4 +69,13 @@ public class NavMeshAgentPoint : MonoBehaviour
         }
        
     }
+    public void Repath()
+    {
+       // Obstacle.SetActive(true);
+    }
+    public void Path()
+    {
+       // Obstacle.SetActive(false);
+    }
+
 }
