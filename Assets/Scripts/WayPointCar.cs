@@ -14,18 +14,19 @@ public class WayPointCar : MonoBehaviour
     public bool Back7;
     public bool TriggerForOptionToMove;
 
-    public GameObject CarCamera;
-    
-    public float LFLidarDistance;
+    public GameObject CarCamera,Shaft;
+
+    public float LFLidarDistance, DebugScum;
     public float RFLidarDistance;
     public float LeftLidarDistance;
     public float RightLidarDistance;
 
-    public float MaxspeedValue=20;
+    public float MaxspeedValue = 20;
     Rigidbody rb;
 
+    public float Lerper1, Lerper2;
 
-
+    public bool WayByOnlyPoints;
 
     public float DistanceForForwardLidars = 3;
     public float DistanceForSideLidars = 3;
@@ -36,7 +37,7 @@ public class WayPointCar : MonoBehaviour
     public GameObject LFLidar, RFLidar, LeftLidar, RightLidar;
     public Transform[] wheelsF; //1
     public Transform[] wheelsB; //1
-
+    public GameObject CDR,CDL;
     public float wheelOffset = 0.1f; //2
     public float wheelRadius = 0.13f; //2
 
@@ -49,7 +50,6 @@ public class WayPointCar : MonoBehaviour
     public float Lenght;
 
     public float Immitsteer = 0;
-    public float ImmiAngle = 0;
     public float MiddleAngle = 0;
 
     public Vector3 OY;
@@ -60,9 +60,15 @@ public class WayPointCar : MonoBehaviour
 
     public Transform COM;
 
+    public float MinimalRadius;
+
+    public GameObject Pointer;
+    public GameObject Points;
+    public float Distance;
+
     private void Awake()
     {
-      
+
 
     }
 
@@ -80,7 +86,13 @@ public class WayPointCar : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        if (WayByOnlyPoints)
+        {
+            CarCamera.SetActive(false);
+        }
+        CDR.GetComponent<CircleDrawer>().radius = (WColForward[0].transform.position - WColBack[0].transform.position).magnitude/Mathf.Tan(maxSteer);
+        CDL.GetComponent<CircleDrawer>().radius = -(WColForward[0].transform.position - WColBack[0].transform.position).magnitude / Mathf.Tan(maxSteer);
+        OY = (Anchor.transform.position - Shaft.transform.position);
         rb = transform.GetComponent<Rigidbody>();
         GetComponent<Rigidbody>().centerOfMass = COM.localPosition;
 
@@ -114,76 +126,44 @@ public class WayPointCar : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 OY = (Anchor.transform.position - transform.position).normalized;
-        Vector3 directionToTarget = (CurrentWaypoint.transform.position - transform.position);
-        Lenght = directionToTarget.magnitude;
 
+        
         float accel = 0;
         float steer = 0;
-
+        if (WayByOnlyPoints)
+        {
+            MovingByPoints();
+        }
         accel = Input.GetAxis("Vertical");
         steer = Input.GetAxis("Horizontal");
-
-
-        CheckLidar();
-        if (exceptionAction == 0)
+        CheckAngle(CurrentWaypoint, Shaft, Axis, ref MiddleAngle, ref Lenght);
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-
-            if (steer == 0 && Immitsteer > 0)
-            {
-                Immitsteer -= 0.01f;
-                steer = Immitsteer;
-                Debug.Log(steer);
-            }
-            else if ((steer == 0 && Immitsteer < 0))
-            {
-                Immitsteer += 0.01f;
-                steer = Immitsteer;
-                Debug.Log(steer);
-            }
-            else if((steer == 0 && Immitsteer == 0))
-            {
-                steer = Immitsteer;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                if (TriggerForOptionToMove)
-                {
-                    TriggerForOptionToMove = false;
-                }
-                else
-                {
-                    TriggerForOptionToMove = true;
-                }
-            }
-            else if(Input.GetKeyUp(KeyCode.Space))
+            if (TriggerForOptionToMove)
             {
                 TriggerForOptionToMove = false;
             }
-
-            if (TriggerForOptionToMove)
-            {
-                CarMove(accel, steer);
-            }
             else
             {
-                CarMoveWithNav(accel, steer, directionToTarget, OY);
+                TriggerForOptionToMove = true;
             }
         }
-
-        else { Exceptions(exceptionAction); }
-        UpdateWheels();
-        ActionsWithAgent(directionToTarget);
-        Debug.Log("Скорость");
-        Debug.Log(rb.velocity.sqrMagnitude);
-        Debug.Log("Коллайдер");
-        foreach (WheelCollider col in WColBack)
+        CheckLidar();
+        if (!WayByOnlyPoints)
         {
-
-            Debug.Log(col.motorTorque);
+            ActionsWithAgent(directionToTarget);
         }
-        Debug.Log("Коллайдер");
+        if (exceptionAction == 0)
+        {
+             CarMoveWithNav(accel, steer);
+        }
+
+        else { Exceptions(exceptionAction, DebugScum); }
+       
+        UpdateWheels();
+       
+        
+
     }
 
     private void UpdateWheels()
@@ -193,22 +173,16 @@ public class WayPointCar : MonoBehaviour
         {
 
             w.rotation = Mathf.Repeat(w.rotation + delta * w.col.rpm * 360.0f / 60.0f, 360.0f); //20
-                                                                                                
+
             //if (w.col.steerAngle<25 && w.col.steerAngle > -25)
-                                                                                                
+
             // {
-                                                                                                
+
             //    w.wheelTransform.localRotation = Quaternion.Euler(w.rotation, 0, 0.0f); //21
-                                                                                                
+
             //}
-            if (Back7)
-            {
-                w.wheelTransform.localRotation = Quaternion.Euler(w.rotation, 0, 0.0f); //21
-            }
-            else
-            {
+
                 w.wheelTransform.localRotation = Quaternion.Euler(w.rotation, w.col.steerAngle, 0.0f); //21
-            }
 
             if (GameObject.Find("InfoMenu") != null)
             {
@@ -218,10 +192,10 @@ public class WayPointCar : MonoBehaviour
 
     }
 
-    private void CarMoveWithNav(float accel,float steer, Vector3 Direction, Vector3 OY)
+    private void CarMoveWithNav(float accel, float steer)
     {
 
-        if (Direction.magnitude > 2)
+        if (Lenght > 2.5)
         {
             accel = 1;
 
@@ -229,23 +203,17 @@ public class WayPointCar : MonoBehaviour
         else
         {
             accel = 0;
-
-
         }
-
-        MiddleAngle = Vector3.SignedAngle(Direction, OY, Axis);
-        MiddleAngle = -MiddleAngle;
-        
-
-        if ((MiddleAngle >= 90) || (MiddleAngle <= -90))
+        if (MiddleAngle >= 90 || MiddleAngle <=-90)
         {
             Back7 = true;
-            accel = -accel;
         }
-        else
+        else 
         {
             Back7 = false;
         }
+
+
 
         if (MiddleAngle >= maxSteer)
         {
@@ -256,27 +224,21 @@ public class WayPointCar : MonoBehaviour
             MiddleAngle = -maxSteer;
         }
 
-        if ((ImmiAngle != MiddleAngle) && (Mathf.Abs(MiddleAngle- ImmiAngle) >=0))
-        {
-           if ((MiddleAngle - ImmiAngle) > 0)
-            {
-                ImmiAngle += 0.3f;
-            }
-            else
-            {
-                ImmiAngle -= 0.3f;
-            }
-        }
-
+       
+   
         foreach (WheelCollider col in WColForward)
         {
             if (Back7)
             {
-                col.steerAngle = 0;
+
+                col.steerAngle = Mathf.MoveTowardsAngle(col.steerAngle, 0, 1f);
+                accel = -1;
+                Debug.Log(col.steerAngle);
             }
             else
             {
-                col.steerAngle = ImmiAngle;
+
+                col.steerAngle = Mathf.MoveTowardsAngle(col.steerAngle, MiddleAngle, 1f);
             }
 
         }
@@ -306,12 +268,13 @@ public class WayPointCar : MonoBehaviour
             }
 
         }
+     
 
 
 
     } //Движение машины за агентом
 
-    
+
 
     private void OnMouseUpAsButton()
     {
@@ -362,27 +325,27 @@ public class WayPointCar : MonoBehaviour
 
     private void CheckLidar()
     {
-        RaycastHit hit1,hit2,hit3,hit4;
+        RaycastHit hit1, hit2, hit3, hit4;
         if (Physics.Raycast(LFLidar.transform.position, LFLidar.transform.forward, out hit1))
         {
-
+            LFLidarDistance = Vector3.Distance(LFLidar.transform.position, hit1.point);
         }
         if (Physics.Raycast(RFLidar.transform.position, RFLidar.transform.forward, out hit2))
         {
-
+            RFLidarDistance = Vector3.Distance(RFLidar.transform.position, hit2.point);
         }
         if (Physics.Raycast(LeftLidar.transform.position, LeftLidar.transform.forward, out hit3))
         {
-
+            LeftLidarDistance = Vector3.Distance(LeftLidar.transform.position, hit3.point);
         }
         if (Physics.Raycast(RightLidar.transform.position, RightLidar.transform.forward, out hit4))
         {
-
+            RightLidarDistance = Vector3.Distance(RightLidar.transform.position, hit4.point);
         }
-        LFLidarDistance = Vector3.Distance(LFLidar.transform.position, hit1.point);
-        RFLidarDistance = Vector3.Distance(RFLidar.transform.position, hit2.point);
-        LeftLidarDistance = Vector3.Distance(LeftLidar.transform.position, hit3.point);
-        RightLidarDistance = Vector3.Distance(RightLidar.transform.position, hit4.point);
+        
+        
+       
+       
 
 
 
@@ -458,69 +421,83 @@ public class WayPointCar : MonoBehaviour
 
     } //Проверка расстояния для исключений
 
-    private void Exceptions(int exceptionAction)
+    private void Exceptions(int exceptionAction,float DebugScum)
     {
-        ImmiAngle = 0;
+
         if (exceptionAction == 1)
         {
-            if (Immitsteer > 0)
+            foreach (WheelCollider col in WColForward)
             {
-                Immitsteer -= 0.01f;
+                    col.steerAngle = Mathf.MoveTowardsAngle(col.steerAngle, 0, 1f);
             }
-            else if (Immitsteer < 0)
+            foreach (WheelCollider col in WColBack)
             {
-                Immitsteer += 0.01f;
+                col.brakeTorque = 0;
+                col.motorTorque = -maxAccel/2;
             }
-            CarMove(-1, Immitsteer);
+
         }//Врезание в параболу = отъезд назад
 
         else if (exceptionAction == 2)
         {
-            CarMove(-1, Immitsteer);
-            Immitsteer -= 0.02f;
-            if (Immitsteer < -1)
+            foreach (WheelCollider col in WColForward)
             {
-                Immitsteer = -1;
+                col.steerAngle = Mathf.MoveTowardsAngle(col.steerAngle, -maxSteer, 1f);
             }
+            foreach (WheelCollider col in WColBack)
+            {
+                col.brakeTorque = 0;
+                col.motorTorque = -maxAccel/2;
+            }
+
         } // Сильно неудачный поворот вправо = Машина едет назад с сильным поворотом колес влево
 
         else if (exceptionAction == 3)
         {
-            CarMove(-1, Immitsteer);
-            Immitsteer += 0.01f;
-            if (Immitsteer > 1)
+
+            foreach (WheelCollider col in WColForward)
             {
-                Immitsteer = 1;
+                col.steerAngle = Mathf.MoveTowardsAngle(col.steerAngle, -maxSteer/2, 1f);
             }
+            foreach (WheelCollider col in WColBack)
+            {
+                col.brakeTorque = 0;
+                col.motorTorque = -maxAccel/2;
+            }
+
         } // неудачный поворот вправо = Машина едет назад с поворотом колес влево
 
         else if (exceptionAction == 4)
         {
-            CarMove(-1, Immitsteer);
-            Immitsteer += 0.02f;
-            if (Immitsteer > 1)
+            foreach (WheelCollider col in WColForward)
             {
-                Immitsteer = 1;
+                col.steerAngle = Mathf.MoveTowardsAngle(col.steerAngle, maxSteer, 1f);
+            }
+            foreach (WheelCollider col in WColBack)
+            {
+                col.brakeTorque = 0;
+                col.motorTorque = -maxAccel/2;
             }
         } // Сильно неудачный поворот влево = Машина едет назад с сильным поворотом колес вправо
 
         else if (exceptionAction == 5)
         {
-            CarMove(-1, Immitsteer);
-            Immitsteer += 0.01f;
-            if (Immitsteer > 1)
+            foreach (WheelCollider col in WColForward)
             {
-                Immitsteer = 1;
+                col.steerAngle = Mathf.MoveTowardsAngle(col.steerAngle, maxSteer/2, 1f);
+            }
+            foreach (WheelCollider col in WColBack)
+            {
+                col.brakeTorque = 0;
+                col.motorTorque = -maxAccel/2;
             }
         } //  неудачный поворот влево = Машина едет назад с  поворотом колес вправо
 
     } // Исключения
 
     private void ActionsWithAgent(Vector3 directionToTarget)
-    { 
-        MiddleAngle = Vector3.SignedAngle(directionToTarget, OY, Axis);
-        MiddleAngle = -MiddleAngle;
-        if ((directionToTarget.magnitude > 4f) || (MiddleAngle>maxSteer|| MiddleAngle<-maxSteer))
+    {
+        if ((directionToTarget.magnitude > 6f))
         {
             CurrentWaypoint.GetComponent<NavMeshAgent>().isStopped = true;
             CurrentWaypoint.GetComponent<NavMeshAgentPoint>().Repath();
@@ -536,16 +513,48 @@ public class WayPointCar : MonoBehaviour
     private void MaxSpeed(Rigidbody rb)
     {
         if (rb.velocity.sqrMagnitude > MaxspeedValue)
+        {
+            foreach (WheelCollider col in WColBack)
             {
-                foreach (WheelCollider col in WColBack)
-                {
-                    
-                    col.motorTorque = 0;
-                }
-           
+
+                col.motorTorque = 0;
             }
-       
+
+        }
+
     }
+
+    private void CheckAngle(GameObject Target, GameObject Shaft, Vector3 Axis,ref float MiddleAngle, ref float Length)
+    {
+        OY = (Anchor.transform.position - Shaft.transform.position);
+        directionToTarget = (Target.transform.position - Shaft.transform.position);  
+        Lenght = directionToTarget.magnitude;
+        directionToTarget.y = 0;
+        OY.y = 0;
+        MiddleAngle = Vector3.SignedAngle(OY, directionToTarget, Axis);
+    }
+
+    private void MovingByPoints()
+    {
+        for (int i = 0; i < Points.transform.childCount; i++)
+        {
+            for (int j = 0; j < Points.transform.GetChild(i).childCount; j++)
+            {
+                Vector3 PointserVector, PointVector, CarVector;
+                CarVector = new Vector3(transform.position.x, 0, transform.position.z);
+                PointserVector = new Vector3(Pointer.transform.position.x, 0, Pointer.transform.position.z);
+                PointVector = new Vector3(Points.transform.GetChild(i).GetChild(j).position.x, 0, Points.transform.GetChild(i).GetChild(j).position.z);
+                if ((PointVector - PointserVector).magnitude < Distance && (CarVector - PointVector).magnitude > (CarVector - PointserVector).magnitude)
+                {
+                    CurrentWaypoint = Points.transform.GetChild(i).GetChild(j).gameObject;
+                }
+
+            }
+        }
+    }
+        
+
+
 
 
 

@@ -1,0 +1,215 @@
+------------------------------------------------------
+Version History
+------------------------------------------------------
+Any issues, comments or suggestions please send to email@jasperstocker.com
+
+------------------------------------------------------
+3.61 - 26 July 2017
+------------------------------------------------------
+Fixed issue with inaccurate preview points in inspector
+
+------------------------------------------------------
+3.6 - 9 April 2017
+------------------------------------------------------
+Factored in Unity 5.6 syntax changes to remove warnings
+Fixed issue with out of range calculations on CameraPath.cs 634
+
+------------------------------------------------------
+3.54 - 11 July 2016
+------------------------------------------------------
+Fixed a bug with looped follow paths jumping at loop
+Fixed normalisation calculations for looping paths
+Added orientation debug arrows for followpath
+
+------------------------------------------------------
+3.52 - 21 March 2016
+------------------------------------------------------
+Added colour option for in scene text
+
+------------------------------------------------------
+3.51 - 21 March 2016
+------------------------------------------------------
+Added a Rule of Thirds overlay to the preview
+Added a custom overlay to allow users to specify a project image
+Fixed some values not exporting to XML
+
+------------------------------------------------------
+3.5 - 17 November 2015
+------------------------------------------------------
+Added controls for editing the preview window
+You can now change the resolution, size and aspect ratio in options
+Added inerpolation of orientation modes to the animator
+You can select this in the animator component or toggle it with code
+
+------------------------------------------------------
+3.45 - 3 November 2015
+------------------------------------------------------
+Fixed target mode on paths with non-zero origins
+Fixed recursive camera path linking not resetting path percents
+
+------------------------------------------------------
+3.44 - 6 October 2015
+------------------------------------------------------
+Fixed speed point issue
+Fixed final orientation point camera flipping
+
+------------------------------------------------------
+3.43 - 25 June 2015
+------------------------------------------------------
+Fixed issue with Camera Path Direction at end of path
+Added Animation Time control to animator
+Added axis markers in orientation editor for easier editing
+Fixed mouse look direction not set correctly on start
+
+------------------------------------------------------
+3.42 - 28 May 2015
+------------------------------------------------------
+Update to Core Direction Algorithm
+New value to modify how directions are calculated
+
+------------------------------------------------------
+3.41 - 7 May 2015
+------------------------------------------------------
+Update to Core Normalisation Algorithm - Increase in speed
+Clicking on point in control point mode will swtich to point mode
+Can move core directory without losing icons now
+Fixed bug with errors occuring when animator component was deleted
+
+------------------------------------------------------
+3.35 - 16 Mar 2015
+------------------------------------------------------
+Unity 5 Update
+Fixed rendertexture issue
+Added button to direct all points along path direction
+
+------------------------------------------------------
+3.34 - 05 Jan 2015
+------------------------------------------------------
+Added Animation Mode Still which only animates the camera orientation set by the orientation mode
+
+------------------------------------------------------
+3.33 - 20 Nov 2014
+------------------------------------------------------
+Added further support for orthographic camera mode
+
+------------------------------------------------------
+3.32 - 17 Nov 2014
+------------------------------------------------------
+Fixed gizmo lines drawing to world zero
+
+------------------------------------------------------
+3.31 - 19 Aug 2014
+------------------------------------------------------
+Fixed text in options tab
+Added warning for stuttering animations
+Improved stored point resolution calculations to reduce incidents of animation stutter
+
+------------------------------------------------------
+3.3 - 5 Aug 2014
+------------------------------------------------------
+Fixed rendertexture format
+Fixed acccuracy of some normalisation readings
+Added customisation of start percentage
+Tested multiple animated objects
+
+------------------------------------------------------
+3.22 - 7 Jul 2014
+------------------------------------------------------
+Fixed rendertexture format
+Fixed editor line rendering accuracy at small scales
+
+------------------------------------------------------
+3.21 - 4 May 2014
+------------------------------------------------------
+Wrapped up examples into a separate unitypackage as users might not want these imported
+Ammended CPEPlayerPathFollow for different orientation modes and Crash Bandicoot style camera
+ADDED Crash Bandicoot style camera example
+
+------------------------------------------------------
+3.2 - 30 Apr 2014
+------------------------------------------------------
+ADDED Orthographic camera size support
+Optimised third person camera script CPEPlayerPathFollow.cs
+Fixed input fields holding values when selected point has been changed
+
+------------------------------------------------------
+3.13 - 12 Apr 2014
+------------------------------------------------------
+ADDED Orthographic camera size support
+Optimised third person camera script CPEPlayerPathFollow.cs
+Fixed input fields holding values when selected point has been changed
+
+------------------------------------------------------
+3.12 - 8 Apr 2014
+------------------------------------------------------
+Fixed serialisation issues so prefabs, duplication and copy pasting are now supported
+Fixed NearestPoint function so it's optimised and ready for 2D work with extremly long paths
+Fixed CPEPlayerPathFollow so it's more robust with looping paths
+Fixed sliders - they work like hot butter now
+Added 2D Demo
+
+------------------------------------------------------
+3.06 - 28 Mar 2014
+------------------------------------------------------
+Fixed animator code to better optimisation and GC calls (thanks Kirk)
+
+------------------------------------------------------
+3.05 - 11 Mar 2014
+------------------------------------------------------
+ADDED ability to specify delay on start point
+Fixed XML to support all Camera Path values
+Fixed path interpolation so it works well
+Fixed points resetting to start of path
+
+------------------------------------------------------
+3.04 - 3 Mar 2014
+------------------------------------------------------
+Added XML import and export to options tab
+Added explicit point placement into inspector
+Fixed issues with two point paths
+Fixed issues with the orientation of the preview window
+Fixed event trigger issues, rebuilt so it's more robust
+
+------------------------------------------------------
+3.03 - 14 Feb 2014
+------------------------------------------------------
+Added arguments to the Call event points
+Fixed events and delays not firing on reverse animations
+
+------------------------------------------------------
+3.02 - 8 Feb 2014
+------------------------------------------------------
+Added Align Camera to Path Point
+Added Toggles for Preview Windows
+Added Store Point Modifier to help with accuracy vs speed of internal calculations
+Fixed slowness on very long paths
+Fixed Control Point Auto Set
+Fixed Preview Point orientation
+
+------------------------------------------------------
+3.01 - 6 Feb 2014
+------------------------------------------------------
+Added Align Camera Path Point to View to menu
+Added editable fields to the point list - made sense right?
+Added Unityscript example scene like v2.x
+Added reverse control point values to GUI
+Added point slider to points on curve
+Renamed some scripts in the examples to avoid conflicting names - fun times
+Fixed events not firing at zero percent
+Fixed preview error on Unity Indie
+
+------------------------------------------------------
+3.0 - 4 Feb 2014
+------------------------------------------------------
+Brand spanking new!
+
+What's New?
+New Camera Path System - Everything is separated so you can freely add orienations or speed events at any point on the path
+Brand new GUI system written making it easier to create your animation
+New control point system - You can now split control points for more control over the curves
+Interpolation options - Hermite, Smooth Step, Linear and Not Interpolated join Bezier interpolation for curve calculations
+Event Points - Specify events that either broadcast C# events or call a monobehaviour method (Send Message)
+Speed Points - You can now control the speed of your animtion within Camera Path natively
+Ease Curves - You can now edit custom ease curves
+Camera Path linking - you can link two camera paths and now interpolate between them like a single path.
+Camera Path automatically registers if you're animating a camera or another GameObject and changes behaviour accordingly

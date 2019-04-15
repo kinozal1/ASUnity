@@ -1,0 +1,24 @@
+------------------------------------------------------
+Upgrading from 3.0x to 3.1
+------------------------------------------------------
+PLEASE backup your work before attempting this journey. While every attempt has been made to ensure it works, you never know.
+Any issues, comments or suggestions please send to  me at email@jasperstocker.com
+
+------------------------------------------------------
+Overview of Process
+------------------------------------------------------
+Backup your project now! :o)
+Go to Options and export your camera path to XML
+Upgrade to 3.1 (if you've already done this it shouldn't matter)
+Import you Camera Path.
+Done
+
+------------------------------------------------------
+Why is this so damn complicated?!
+------------------------------------------------------
+Yeah, really sucks. I'm sorry, but it's the best way to get an upgrade path from 3.0x to 3.1
+Camera Path has been slightly rebuilt in the core and there was no way I could keep backwards compatibility.
+Unity serialisation issues, prefab compatibility and duplicating paths are now fully supported.
+Hope you enjoy
+
+Jasper

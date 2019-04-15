@@ -39,7 +39,7 @@ public class NavMeshAgentPoint : MonoBehaviour
 
             }
   
-            CheckAngle(agent.pathEndPosition);
+            //CheckAngle(agent.pathEndPosition);
         }
         else
         {

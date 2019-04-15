@@ -8,10 +8,16 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Bali.unity
-    guid: 8f0cd7faa1b090c49a541497404d39cc
+    path: Assets/Scenes/StartScene.unity
+    guid: 241a86ad5d580cb49b3ccef91823d954
   - enabled: 1
-    path: Assets/Map.unity
-    guid: 849270bd12245184fa08caa17866a87a
+    path: Assets/Scenes/MapWithGraph.unity
+    guid: f2e8c87c88a8cde4b8646f576799d642
   m_configObjects: {}

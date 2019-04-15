@@ -10,11 +10,11 @@ public class InfoMenuController : MonoBehaviour
 
     public GameObject CurrentCar;
     public GameObject Point;
+    public GameObject Menu;
 
 
     public int TypeOfCar;
     public GameObject[] Types;
-
 
 
     public string CurrentCarName;
@@ -31,12 +31,20 @@ public class InfoMenuController : MonoBehaviour
     public Text TextBar4;
     public Text TextBar5;
     public Text TextBar6;
+    public Text TextBar7;
+    public Text TextBar8;
+    public Text TextBar9;
     // Start is called before the first frame update
     public void OnEnable()
     {
         Kostil = true;
+        Menu.SetActive(false);
     }
-    
+    public void OnDisable()
+    {
+        Menu.SetActive(true);
+    }
+
     private void Awake()
     {
 
@@ -60,15 +68,17 @@ public class InfoMenuController : MonoBehaviour
             Kostil = false;
         }
 
+        Random rd = new Random();
         OX = CurrentCar.transform.position.x;
         OY = CurrentCar.transform.position.y;
         OZ = CurrentCar.transform.position.z;
-        TextBar1.text = CurrentCarName;
+        TextBar1.text = "Тестовая машина";
         TextBar2.text=OX.ToString("f2");
         TextBar3.text = OY.ToString("f2");
         TextBar4.text = OZ.ToString("f2");
         TextBar5.text = AngleOfLifter.ToString("f2");
         TextBar6.text = RPM.ToString("f2");
+       
 
     }
   public void WhenClicked()
