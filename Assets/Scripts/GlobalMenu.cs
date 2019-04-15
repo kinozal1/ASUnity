@@ -79,7 +79,7 @@ public class GlobalMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
+      
     }
     private void OnEnable()
     {
@@ -162,7 +162,7 @@ public class GlobalMenu : MonoBehaviour
     }
     public void ExitFromApp()
     {
-        Application.Quit();
+        UnityEngine.Application.Quit();
     }
     public void EnterToCarSettingsMenu()
     {
@@ -391,11 +391,19 @@ public class GlobalMenu : MonoBehaviour
                 indexforfile++;
             }
             pathToWrite = string.Format("LogsForData/Log{0}.txt", indexforfile);
-            SW = new StreamWriter(pathToWrite, true);
-            UDPCLIENT.GetComponent<UDPClient1>().StartUseTextData = false;
-            UDPCLIENT.GetComponent<UDPClient1>().StartWriteTextData = true;
-            DataWriter.text = "Запись идет";
-            DataReader.text = "Чтение остановлено";
+            if (pathToWrite!=null)
+            {
+                SW = new StreamWriter(pathToWrite, true);
+                UDPCLIENT.GetComponent<UDPClient1>().StartUseTextData = false;
+                UDPCLIENT.GetComponent<UDPClient1>().StartWriteTextData = true;
+                DataWriter.text = "Запись идет";
+                DataReader.text = "Чтение остановлено";
+            }
+            else
+            {
+                StartDataWrite = !StartDataWrite;
+            }
+            
         }
         else
         {

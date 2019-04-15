@@ -314,6 +314,7 @@ public class UDPClient1 : MonoBehaviour
             {
                 Car.GetComponent<WayPointCar>().CarCamera.SetActive(false);
                 Car.GetComponent<WayPointCar>().CurrentCamera.SetActive(true);
+               
             }
         }
         else
@@ -324,6 +325,7 @@ public class UDPClient1 : MonoBehaviour
                 Car.GetComponent<WayPointCar>().CurrentCamera.SetActive(false);
             }
         }
+        
         
     }
 
