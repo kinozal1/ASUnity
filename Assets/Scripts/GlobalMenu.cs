@@ -5,19 +5,22 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 using System.IO;
-using UnityEditor;
-using System.Runtime.InteropServices;
+using UnityEngine.EventSystems;
+
 
 public class GlobalMenu : MonoBehaviour
 {
-    [DllImport("user32.dll")]
-    private static extern void OpenFileDialog(); 
+
+    public GameObject MainCamera;
     public GameObject UDPCLIENT;
     public GameObject MainMenu;
     public GameObject Menu;
     public GameObject UDPSettings;
     public GameObject CarSettings;
     public GameObject EnterButton;
+    public GameObject ButtonPrefab;
+    public GameObject Container;
+    public GameObject OpenFileDialog;
 
     public InputField ListenPortField;
     public InputField SendPortField;
@@ -56,6 +59,9 @@ public class GlobalMenu : MonoBehaviour
 
     public Text TestStringBool;
 
+    public Text ForawrdSideways;
+
+
 
     public bool StartDataWrite = false;
     public bool StartDataRead = false;
@@ -64,6 +70,7 @@ public class GlobalMenu : MonoBehaviour
     public bool ReadCoroutineIsStarted = false;
     public bool WriteCoroutineIsStarted = false;
     public bool UseTestString = false;
+    public bool ChangeValues = false;
 
     public string pathToWrite="LogsForData/Log.txt";
     public string pathToRead;
@@ -77,14 +84,17 @@ public class GlobalMenu : MonoBehaviour
 
     public bool SideForward=true;
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+       
+    }
     void Start()
     {
       
     }
-    private void OnEnable()
-    {
-        
-    }
+
+
     // Update is called once per frame
     void Update()
     {
@@ -168,31 +178,34 @@ public class GlobalMenu : MonoBehaviour
     {
         MainMenu.SetActive(false);
         CarSettings.SetActive(true);
+
         try
         {
-            MotorTorqueText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().maxAccel.ToString();
-            AngleText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().maxSteer.ToString();
-            BreakText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().maxBrake.ToString(); ;
-            FDistanceText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().DistanceForForwardLidars.ToString();
-            SDistanceText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().DistanceForSideLidars.ToString();
+       
+                MotorTorqueText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().maxAccel.ToString();
+                AngleText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().maxSteer.ToString();
+                BreakText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().maxBrake.ToString(); 
+                FDistanceText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().DistanceForForwardLidars.ToString();
+                SDistanceText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().DistanceForSideLidars.ToString();
 
-            ExtremumSlipText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.extremumSlip.ToString();
-            ExtremumValueText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.extremumValue.ToString();
-            AsymptoteSlipText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.asymptoteSlip.ToString();
-            AsymptoteValueText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.asymptoteValue.ToString();
-            StiffnessText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.stiffness.ToString();
+                ExtremumSlipText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.extremumSlip.ToString();
+                ExtremumValueText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.extremumValue.ToString();
+                AsymptoteSlipText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.asymptoteSlip.ToString();
+                AsymptoteValueText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.asymptoteValue.ToString();
+                StiffnessText.text = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.stiffness.ToString();
 
-            MotorTorque.value = (int)(UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().maxAccel / 100);
-            Angle.value = (int)(UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().maxSteer);
-            Break.value = (int)(UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().maxBrake / 200);
-            FDistance.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().DistanceForForwardLidars;
-            SDistance.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().DistanceForSideLidars;
+                MotorTorque.value = (int)(UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().maxAccel / 100);
+                Angle.value = (int)(UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().maxSteer);
+                Break.value = (int)(UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().maxBrake / 200);
+                FDistance.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().DistanceForForwardLidars;
+                SDistance.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().DistanceForSideLidars;
 
-            ExtremumSlipSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.extremumSlip;
-            ExtremumValueSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.extremumValue;
-            AsymptoteSlipSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.asymptoteSlip;
-            AsymptoteValueSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.asymptoteValue;
-            StiffnessSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.stiffness;
+                ExtremumSlipSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.extremumSlip;
+                ExtremumValueSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.extremumValue;
+                AsymptoteSlipSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.asymptoteSlip;
+                AsymptoteValueSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.asymptoteValue;
+                StiffnessSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.stiffness;
+            
 
         }
 
@@ -210,6 +223,10 @@ public class GlobalMenu : MonoBehaviour
             StiffnessText.text = "НетДанных";
 
         }
+        finally
+        {
+            ChangeValues = true;
+        }
 
 
     }
@@ -217,6 +234,7 @@ public class GlobalMenu : MonoBehaviour
     {
         MainMenu.SetActive(true);
         CarSettings.SetActive(false);
+        ChangeValues = false;
     }
     public void ListenPortChange(string s)
     {
@@ -256,77 +274,278 @@ public class GlobalMenu : MonoBehaviour
 
     public void MotorTorqueChange()
     {
-        foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+        if (ChangeValues)
         {
-            Car.GetComponent<WayPointCar>().maxAccel = MotorTorque.value * 100;
+            foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+            {
+                Car.GetComponent<WayPointCar>().maxAccel = MotorTorque.value * 100;
+            }
+            MotorTorqueText.text = (MotorTorque.value * 100).ToString();
         }
-        MotorTorqueText.text = (MotorTorque.value * 100).ToString();
     }
     public void AngleChange()
     {
-        foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+        if (ChangeValues)
         {
-            Car.GetComponent<WayPointCar>().maxSteer = Angle.value;
+            foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+            {
+                Car.GetComponent<WayPointCar>().maxSteer = Angle.value;
+            }
+            AngleText.text = (Angle.value).ToString();
         }
-        AngleText.text = (Angle.value).ToString();
     }
     public void BreakChange()
     {
-        foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+        if (ChangeValues)
         {
-            Car.GetComponent<WayPointCar>().maxBrake = Break.value * 200;
+            foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+            {
+                Car.GetComponent<WayPointCar>().maxBrake = Break.value * 200;
+            }
+            BreakText.text = (Break.value * 200).ToString();
         }
-        BreakText.text = (Break.value * 200).ToString();
     }
 
     public void FDistanceChange()
     {
-        foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+        if (ChangeValues)
         {
-            Car.GetComponent<WayPointCar>().maxBrake = FDistance.value;
+            foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+            {
+                Car.GetComponent<WayPointCar>().maxBrake = FDistance.value;
+            }
+            FDistanceText.text = (FDistance.value).ToString();
         }
-        FDistanceText.text = (FDistance.value).ToString();
     }
     public void SDistanceChange()
     {
-        foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+        if (ChangeValues)
         {
-            Car.GetComponent<WayPointCar>().DistanceForSideLidars = SDistance.value;
+            foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+            {
+                Car.GetComponent<WayPointCar>().DistanceForSideLidars = SDistance.value;
+            }
+            SDistanceText.text = (SDistance.value).ToString();
         }
-        SDistanceText.text = (SDistance.value).ToString();
     }
     public void NDistanceChange(int s)
     {
-        foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+        if (ChangeValues)
         {
-            Car.GetComponent<WayPointCar>().DistanceForNormalMove = NDistance.value;
+            foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+            {
+                Car.GetComponent<WayPointCar>().DistanceForNormalMove = NDistance.value;
+            }
+            NDistanceText.text = (NDistance.value).ToString();
         }
-        NDistanceText.text = (NDistance.value).ToString();
     }
+
+
     public void ExtremumSlipChange()
     {
-        if (DirectionBool)
+        if (ChangeValues)
         {
+
+                foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+                {
+                    foreach (WheelCollider w in Car.GetComponent<WayPointCar>().WColForward)
+                    {
+                        if (SideForward)
+                        {
+                            WheelFrictionCurve wheelFriction = new WheelFrictionCurve();
+                            wheelFriction = w.sidewaysFriction;
+                            wheelFriction.extremumSlip = ExtremumSlipSlider.value;
+                            w.sidewaysFriction = wheelFriction;
+                        Debug.Log(wheelFriction.extremumSlip);
+                    }
+                        else
+                        {
+
+                            WheelFrictionCurve wheelFriction = new WheelFrictionCurve();
+                            wheelFriction = w.forwardFriction;
+                            wheelFriction.extremumSlip = ExtremumSlipSlider.value;
+                            w.forwardFriction = wheelFriction;
+                        Debug.Log(wheelFriction.extremumSlip);
+                    }
+                    }
+                    
+                }
+                ExtremumSlipText.text = (ExtremumSlipSlider.value).ToString();
+        }
+
+    }
+
+    public void ExtremumValueChange()
+    {
+        if (ChangeValues)
+        {
+
             foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
             {
                 foreach (WheelCollider w in Car.GetComponent<WayPointCar>().WColForward)
                 {
                     if (SideForward)
                     {
-
+                        WheelFrictionCurve wheelFriction = new WheelFrictionCurve();
+                        wheelFriction = w.sidewaysFriction;
+                        wheelFriction.extremumValue = ExtremumValueSlider.value;
+                        w.sidewaysFriction = wheelFriction;
                     }
                     else
                     {
 
+                        WheelFrictionCurve wheelFriction = new WheelFrictionCurve();
+                        wheelFriction = w.forwardFriction;
+                        wheelFriction.extremumValue = ExtremumValueSlider.value;
+                        w.forwardFriction = wheelFriction;
                     }
                 }
-                Car.GetComponent<WayPointCar>().DistanceForNormalMove = ExtremumSlipSlider.value;
             }
-            ExtremumSlipText.text = (NDistance.value).ToString();
+            ExtremumValueText.text = (ExtremumValueSlider.value).ToString();
+        }
+
+    }
+
+    public void StriffnesChanged()
+    {
+        if (ChangeValues)
+        {
+
+            foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+            {
+                foreach (WheelCollider w in Car.GetComponent<WayPointCar>().WColForward)
+                {
+                    if (SideForward)
+                    {
+                        WheelFrictionCurve wheelFriction = new WheelFrictionCurve();
+                        wheelFriction = w.sidewaysFriction;
+                        wheelFriction.stiffness = StiffnessSlider.value;
+                        w.sidewaysFriction = wheelFriction;
+                    }
+                    else
+                    {
+
+                        WheelFrictionCurve wheelFriction = new WheelFrictionCurve();
+                        wheelFriction = w.forwardFriction;
+                        wheelFriction.stiffness = StiffnessSlider.value;
+                        w.forwardFriction = wheelFriction;
+                    }
+                }
+            }
+            StiffnessText.text = (StiffnessSlider.value).ToString();
+        }
+
+    }
+
+    public void AsymptoteSlipChange()
+    {
+        if (ChangeValues)
+        {
+
+            foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+            {
+                foreach (WheelCollider w in Car.GetComponent<WayPointCar>().WColForward)
+                {
+                    if (SideForward)
+                    {
+                        WheelFrictionCurve wheelFriction = new WheelFrictionCurve();
+                        wheelFriction = w.sidewaysFriction;
+                        wheelFriction.asymptoteSlip = AsymptoteSlipSlider.value;
+                        w.sidewaysFriction = wheelFriction;
+                        
+                    }
+                    else
+                    {
+
+                        WheelFrictionCurve wheelFriction = new WheelFrictionCurve();
+                        wheelFriction = w.forwardFriction;
+                        wheelFriction.asymptoteSlip = AsymptoteSlipSlider.value;
+                        w.forwardFriction = wheelFriction;
+
+                    }
+                }
+               
+            }
+            AsymptoteSlipText.text = (AsymptoteSlipSlider.value).ToString();
+        }
+
+    }
+
+    public void AsymptoteValueChange()
+    {
+        if (ChangeValues)
+        {
+
+            foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+            {
+                foreach (WheelCollider w in Car.GetComponent<WayPointCar>().WColForward)
+                {
+                    if (SideForward)
+                    {
+                        WheelFrictionCurve wheelFriction = new WheelFrictionCurve();
+                        wheelFriction = w.sidewaysFriction;
+                        wheelFriction.asymptoteValue = AsymptoteValueSlider.value;
+                        w.sidewaysFriction = wheelFriction;
+                    }
+                    else
+                    {
+
+                        WheelFrictionCurve wheelFriction = new WheelFrictionCurve();
+                        wheelFriction = w.forwardFriction;
+                        wheelFriction.asymptoteValue = AsymptoteValueSlider.value;
+                        w.forwardFriction = wheelFriction;
+                    }
+                }
+            }
+            AsymptoteValueText.text = (AsymptoteValueSlider.value).ToString();
+        }
+
+    }
+    public void ChangeSideAndForward()
+    {
+        SideForward = !SideForward;
+        if (SideForward)
+        {
+            ChangeValues = false;
+            ExtremumSlipSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].sidewaysFriction.extremumSlip;
+            ExtremumValueSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].sidewaysFriction.extremumValue;
+            AsymptoteSlipSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].sidewaysFriction.asymptoteSlip;
+            AsymptoteValueSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].sidewaysFriction.asymptoteValue;
+            StiffnessSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].sidewaysFriction.stiffness;
+
+            ExtremumSlipText.text = ExtremumSlipSlider.value.ToString();
+            ExtremumValueText.text = ExtremumValueSlider.value.ToString();
+            AsymptoteSlipText.text = AsymptoteSlipSlider.value.ToString();
+            AsymptoteValueText.text = AsymptoteValueSlider.value.ToString();
+            StiffnessText.text = StiffnessSlider.value.ToString();
+
+            ChangeValues = true;
+            ForawrdSideways.text = "Боковое сопротивление";
+        }
+        else
+        {
+            ChangeValues = false;
+            ExtremumSlipSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.extremumSlip;
+            ExtremumValueSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.extremumValue;
+            AsymptoteSlipSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.asymptoteSlip;
+            AsymptoteValueSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.asymptoteValue;
+            StiffnessSlider.value = UDPCLIENT.GetComponent<UDPClient1>().CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.stiffness;
+
+            ExtremumSlipText.text = ExtremumSlipSlider.value.ToString();
+            ExtremumValueText.text = ExtremumValueSlider.value.ToString();
+            AsymptoteSlipText.text = AsymptoteSlipSlider.value.ToString();
+            AsymptoteValueText.text = AsymptoteValueSlider.value.ToString();
+            StiffnessText.text = StiffnessSlider.value.ToString();
+
+            ChangeValues = true;
+            ForawrdSideways.text = "Переднее сопротивление";
         }
     }
 
-    public void ButtonToUseTestString()
+
+
+
+        public void ButtonToUseTestString()
     {
         UseTestString = !UseTestString;
         if (UseTestString)
@@ -350,19 +569,25 @@ public class GlobalMenu : MonoBehaviour
         StartDataRead = !StartDataRead;
         if (StartDataRead)
         {
-            System.Windows.Forms.OpenFileDialog OpenDialog = new System.Windows.Forms.OpenFileDialog();
-            OpenDialog.ShowDialog();
-            pathToRead = OpenDialog.FileName;
+            MainCamera.GetComponent<camera>().enabled = false;
+            OpenFileDialog.SetActive(true);
+            string[] allfiles = Directory.GetFiles("LogsForData", "*.txt*");
+            for (int i = 0; i < Container.transform.childCount; i++)
+            {
+                Destroy(Container.transform.GetChild(i).gameObject);
+            }
+            foreach(string filename in allfiles)
+            {
+                GameObject NewButton = Instantiate(ButtonPrefab, Container.transform);
+                NewButton.GetComponentInChildren<Text>().text = filename;
+                NewButton.GetComponent<Button>().onClick.AddListener(ChoosePath);
+            }
             //if (SW != null)
             //{
             //    SW.Flush();
             //    SW.Close();
             //}
-            SR = new StreamReader(pathToRead, true);
-            UDPCLIENT.GetComponent<UDPClient1>().StartUseTextData = true;
-            UDPCLIENT.GetComponent<UDPClient1>().StartWriteTextData = false;
-            DataReader.text = "Чтение идет";
-            DataWriter.text = "Запись остановлена";
+            
         }
         else
         {
@@ -423,27 +648,30 @@ public class GlobalMenu : MonoBehaviour
 
     IEnumerator ReadWithTime()
     {
-        ReadCoroutineIsStarted = true;
-       
-       
-        StringForReadAndWrite = SR.ReadLine();
-        if (StringForReadAndWrite != null)
+        if (SR != null)
         {
-            string[] s = StringForReadAndWrite.Split('|');
-            StringForReadAndWrite = s[0];
-            frequency = float.Parse(s[1]);
-            yield return new WaitForSeconds(frequency);
-            UDPCLIENT.GetComponent<UDPClient1>().StringFromGlobalMenu = StringForReadAndWrite;
-           
+            ReadCoroutineIsStarted = true;
 
+
+            StringForReadAndWrite = SR.ReadLine();
+            if (StringForReadAndWrite != null)
+            {
+                string[] s = StringForReadAndWrite.Split('|');
+                StringForReadAndWrite = s[0];
+                frequency = float.Parse(s[1]);
+                yield return new WaitForSeconds(frequency);
+                UDPCLIENT.GetComponent<UDPClient1>().StringFromGlobalMenu = StringForReadAndWrite;
+
+
+            }
+            else
+            {
+                DataRead();
+            }
+
+
+            ReadCoroutineIsStarted = false;
         }
-        else
-        {
-            DataRead();
-        }
-       
-        
-        ReadCoroutineIsStarted = false;
 
 
     }
@@ -463,6 +691,22 @@ public class GlobalMenu : MonoBehaviour
 
 
     }
+
+    public void ChoosePath()
+    {
+        string path = EventSystem.current.currentSelectedGameObject.GetComponentInChildren<Text>().text;
+
+        SR = new StreamReader(path, true);
+        StartDataRead = true;
+        UDPCLIENT.GetComponent<UDPClient1>().StartUseTextData = true;
+        UDPCLIENT.GetComponent<UDPClient1>().StartWriteTextData = false;
+        DataReader.text = "Чтение идет";
+        DataWriter.text = "Запись остановлена";
+        MainCamera.GetComponent<camera>().enabled = true;
+        OpenFileDialog.SetActive(false);
+    }
+
+
 
     ////ExtremumSlipText.text = UDPclient.CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.extremumSlip.ToString();
     ////        ExtremumValueText.text = UDPclient.CarList[0].GetComponent<WayPointCar>().WColForward[0].forwardFriction.extremumValue.ToString();
