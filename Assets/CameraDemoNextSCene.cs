@@ -77,7 +77,7 @@ public class CameraDemoNextSCene : MonoBehaviour
     IEnumerator Wait()
     {
 
-        yield return new WaitForSeconds(AnimatorForNextLevel.animationTime-3);
+        yield return new WaitForSeconds(4.5f);
         AnimationScript.GetComponent<OpenAnimation>().StartOpening= false;
         AnimationScript.GetComponent<OpenAnimation>().StartEnding = true;
 

@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class OpenAnimation : MonoBehaviour
 {
-    public float FadeRate;
+    public float FadeRate = 0.005f;
+    public float ReFadeRate = 0.005f;
     public RawImage image;
     public Image[] Logos;
     public float targetAlpha;
@@ -38,7 +39,7 @@ public class OpenAnimation : MonoBehaviour
             if (alphaDiff > 0.0001f)
             {
 
-                currentcolor.a = currentcolor.a - 0.003f; 
+                currentcolor.a = currentcolor.a - FadeRate; 
                 image.color = currentcolor;
                 for (int i = 0; i < Logos.Length; i++)
                 {
@@ -59,7 +60,7 @@ public class OpenAnimation : MonoBehaviour
             if (alphaDiff > 0.0001f)
             {
 
-                currentcolor.a = currentcolor.a + 0.003f;
+                currentcolor.a = currentcolor.a + ReFadeRate;
                 image.color = currentcolor;
                 for (int i = 0; i < Logos.Length; i++)
                 {
@@ -95,5 +96,10 @@ public class OpenAnimation : MonoBehaviour
 
 
 
+    }
+
+    public void Exit()
+    {
+        UnityEngine.Application.Quit();
     }
 }

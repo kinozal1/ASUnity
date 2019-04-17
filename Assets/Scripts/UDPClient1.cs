@@ -87,7 +87,7 @@ public class UDPClient1 : MonoBehaviour
     private Thread receiveThread;
     private IPEndPoint remoteEndPoint;
     private IPAddress ipAddressSend;
-    WorkWithPoints workWithPoints;
+    public WorkWithPoints workWithPoints;
 
     public bool ReceiveByUDP;
     private void Start()

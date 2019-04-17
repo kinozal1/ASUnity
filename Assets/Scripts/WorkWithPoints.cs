@@ -106,4 +106,23 @@ public class WorkWithPoints : MonoBehaviour
 
 
     }
+
+    public void ShowPointsMethod(bool ShowPoints)
+    {
+        RaycastHit hit;
+        for (int i = 0; i < Points.transform.childCount; i++)
+        {
+            for (int j = 0; j < Points.transform.GetChild(i).childCount; j++)
+            {
+                if (!ShowPoints)
+                {
+                    Points.transform.GetChild(i).GetChild(j).GetComponent<MeshRenderer>().enabled = false;
+                }
+                else
+                {
+                    Points.transform.GetChild(i).GetChild(j).GetComponent<MeshRenderer>().enabled = true; ;
+                }
+            }
+        }
+    }
 }

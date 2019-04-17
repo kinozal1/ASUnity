@@ -61,7 +61,8 @@ public class GlobalMenu : MonoBehaviour
 
     public Text ForawrdSideways;
 
-
+    WorkWithPoints workWithPoints;
+    public GameObject Points;
 
     public bool StartDataWrite = false;
     public bool StartDataRead = false;
@@ -71,6 +72,7 @@ public class GlobalMenu : MonoBehaviour
     public bool WriteCoroutineIsStarted = false;
     public bool UseTestString = false;
     public bool ChangeValues = false;
+    public bool ShowPoints = false;
 
     public string pathToWrite="LogsForData/Log.txt";
     public string pathToRead;
@@ -87,11 +89,14 @@ public class GlobalMenu : MonoBehaviour
 
     private void Awake()
     {
-       
+        workWithPoints = UDPCLIENT.GetComponent<UDPClient1>().workWithPoints;
+        Points = UDPCLIENT.GetComponent<UDPClient1>().Points;
     }
     void Start()
     {
-      if(!Directory.Exists("LogsForData"))
+        workWithPoints = UDPCLIENT.GetComponent<UDPClient1>().workWithPoints;
+        Points = UDPCLIENT.GetComponent<UDPClient1>().Points;
+        if (!Directory.Exists("LogsForData"))
         {
             Directory.CreateDirectory("LogsForData");
         }
@@ -635,7 +640,7 @@ public class GlobalMenu : MonoBehaviour
             UDPCLIENT.GetComponent<UDPClient1>().ClearData();
             UDPCLIENT.GetComponent<UDPClient1>().StartUseTextData = false;
             UDPCLIENT.GetComponent<UDPClient1>().StartWriteTextData = false;
-            DataReader.text = "Чтение остановлено";
+            DataReader.text = "Импорт";
             StartDataRead = false;
         }
        
@@ -644,7 +649,7 @@ public class GlobalMenu : MonoBehaviour
     {
 
         StartDataRead = false;
-        DataReader.text = "Чтение остановлено";
+        DataReader.text = "Импорт";
         StartDataWrite = !StartDataWrite;
         if (StartDataWrite)
         {
@@ -661,8 +666,8 @@ public class GlobalMenu : MonoBehaviour
                 SW = new StreamWriter(pathToWrite, true);
                 UDPCLIENT.GetComponent<UDPClient1>().StartUseTextData = false;
                 UDPCLIENT.GetComponent<UDPClient1>().StartWriteTextData = true;
-                DataWriter.text = "Запись идет";
-                DataReader.text = "Чтение остановлено";
+                DataWriter.text = "Запись";
+                DataReader.text = "Импорт";
             }
             else
             {
@@ -740,7 +745,7 @@ public class GlobalMenu : MonoBehaviour
         StartDataRead = true;
         UDPCLIENT.GetComponent<UDPClient1>().StartUseTextData = true;
         UDPCLIENT.GetComponent<UDPClient1>().StartWriteTextData = false;
-        DataReader.text = "Чтение идет";
+        DataReader.text = "Импорт";
         DataWriter.text = "Запись остановлена";
         MainCamera.GetComponent<camera>().enabled = true;
         OpenFileDialog.SetActive(false);
@@ -752,34 +757,10 @@ public class GlobalMenu : MonoBehaviour
         OpenFileDialog.SetActive(false);
     }
 
-    public void ClearObjectsAndData()
+    public void OnOffPoints()
     {
-        //foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList )
-        //{
-        //    Destroy(Car);
-        //}
-        //UDPCLIENT.GetComponent<UDPClient1>().CarList.Clear();
-
-        //foreach (GameObject Point in UDPCLIENT.GetComponent<UDPClient1>().TargetPointList)
-        //{
-        //    Destroy(Point);
-        //}
-        //UDPCLIENT.GetComponent<UDPClient1>().TargetPointList.Clear();
-
-        //foreach (GameObject Agent in UDPCLIENT.GetComponent<UDPClient1>().AgentPointList)
-        //{
-        //    Destroy(Agent);
-        //}
-
-
-        //UDPCLIENT.GetComponent<UDPClient1>().AgentPointList.Clear();
-        //UDPCLIENT.GetComponent<UDPClient1>().AgentPointList.Clear();
-
-        //UDPclient.CarList
-        //CarList.Clear();
-        //AgentPointList.Clear(); // НавМешАгенты машин
-        //TargetPointList.Clear(); // ТочкиСледования для НавМеш
-        //CarDataList.Clear(); // Информация о всех машинах 
+        ShowPoints = !ShowPoints;
+        workWithPoints.ShowPointsMethod(ShowPoints);
     }
 
 
