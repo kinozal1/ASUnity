@@ -133,10 +133,9 @@ public class UDPClient1 : MonoBehaviour
         }
         if (StartUseTextData) // Прием данных из файла
         {
-            if(StringFromGlobalMenu != null || StringFromGlobalMenu!="")
-            {
+
                 received = StringFromGlobalMenu;
-            }
+            
            
         }
         else if (StartWriteTextData) // Запись данных в файл
@@ -287,7 +286,6 @@ public class UDPClient1 : MonoBehaviour
             receiveThread.Abort();
             receiveThread = null;
         }
-        client.Close();
         Debug.Log("UDPClient: exit");
     }
 
@@ -373,11 +371,30 @@ public class UDPClient1 : MonoBehaviour
         }
     }
 
-    void ClearData()
+    public void ClearData()
     {
-        CarList.Clear();
-        AgentPointList.Clear(); // НавМешАгенты машин
-        TargetPointList.Clear(); // ТочкиСледования для НавМеш
-        CarDataList.Clear(); // Информация о всех машинах 
+        received = "";
+        StringFromGlobalMenu = "";
+        foreach (GameObject Car in CarList)
+        {
+            Destroy(Car);
+        }
+       CarList.Clear();
+
+        foreach (GameObject Point in TargetPointList)
+        {
+            Destroy(Point);
+        }
+        TargetPointList.Clear();
+
+        foreach (GameObject Agent in AgentPointList)
+        {
+            Destroy(Agent);
+        }
+        AgentPointList.Clear();
+        CarDataList.Clear();
+        workWithPoints.ClearData();
+
+
     }
 }

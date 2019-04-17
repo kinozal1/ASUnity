@@ -47,7 +47,7 @@ public class WorkWithPoints : MonoBehaviour
     {
         if (CorrectToPoints)
         {
-            
+
             for (int i = 0; i < Points.transform.childCount; i++)
             {
                 for (int j = 0; j < Points.transform.GetChild(i).childCount; j++)
@@ -69,7 +69,7 @@ public class WorkWithPoints : MonoBehaviour
             {
                 for (int i = 0; i < Points.transform.GetChild(NumberOfCurrentEdge).childCount; i++)
                 {
-                    Points.transform.GetChild(NumberOfCurrentEdge).GetChild(i).GetComponent<MeshRenderer>().material= MaterialForEdge;
+                    Points.transform.GetChild(NumberOfCurrentEdge).GetChild(i).GetComponent<MeshRenderer>().material = MaterialForEdge;
                 }
                 NumberOfCurrentEdge = NumberOfEdge;
                 for (int i = 0; i < Points.transform.GetChild(NumberOfEdge).childCount; i++)
@@ -78,19 +78,32 @@ public class WorkWithPoints : MonoBehaviour
                     {
                         Points.transform.GetChild(NumberOfEdge).GetChild(i).GetComponent<MeshRenderer>().material = MaterialForCurrentEdge;
                     }
-                    
+
                 }
             }
 
-            
+
             CurrentCoordPoint = SavesPos;
             distance = 10000;
         }
         else
         {
-            
+
         }
 
-      
+
+    }
+
+    public void ClearData()
+    {
+
+            for (int i = 0; i < Points.transform.GetChild(NumberOfCurrentEdge).childCount; i++)
+            {
+                Points.transform.GetChild(NumberOfCurrentEdge).GetChild(i).GetComponent<MeshRenderer>().material = MaterialForEdge;
+            }
+        NumberOfCurrentEdge = 0;
+
+
+
     }
 }

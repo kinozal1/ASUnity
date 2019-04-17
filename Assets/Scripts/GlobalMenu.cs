@@ -91,7 +91,10 @@ public class GlobalMenu : MonoBehaviour
     }
     void Start()
     {
-      
+      if(!Directory.Exists("LogsForData"))
+        {
+            Directory.CreateDirectory("LogsForData");
+        }
     }
 
 
@@ -628,6 +631,8 @@ public class GlobalMenu : MonoBehaviour
         {
             frequency = 0;
             SR.Dispose();
+            SR = null;
+            UDPCLIENT.GetComponent<UDPClient1>().ClearData();
             UDPCLIENT.GetComponent<UDPClient1>().StartUseTextData = false;
             UDPCLIENT.GetComponent<UDPClient1>().StartWriteTextData = false;
             DataReader.text = "Чтение остановлено";
@@ -739,6 +744,42 @@ public class GlobalMenu : MonoBehaviour
         DataWriter.text = "Запись остановлена";
         MainCamera.GetComponent<camera>().enabled = true;
         OpenFileDialog.SetActive(false);
+    }
+
+    public void ExitFromOpenFileDialog()
+    {
+        StartDataRead = false;
+        OpenFileDialog.SetActive(false);
+    }
+
+    public void ClearObjectsAndData()
+    {
+        //foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList )
+        //{
+        //    Destroy(Car);
+        //}
+        //UDPCLIENT.GetComponent<UDPClient1>().CarList.Clear();
+
+        //foreach (GameObject Point in UDPCLIENT.GetComponent<UDPClient1>().TargetPointList)
+        //{
+        //    Destroy(Point);
+        //}
+        //UDPCLIENT.GetComponent<UDPClient1>().TargetPointList.Clear();
+
+        //foreach (GameObject Agent in UDPCLIENT.GetComponent<UDPClient1>().AgentPointList)
+        //{
+        //    Destroy(Agent);
+        //}
+
+
+        //UDPCLIENT.GetComponent<UDPClient1>().AgentPointList.Clear();
+        //UDPCLIENT.GetComponent<UDPClient1>().AgentPointList.Clear();
+
+        //UDPclient.CarList
+        //CarList.Clear();
+        //AgentPointList.Clear(); // НавМешАгенты машин
+        //TargetPointList.Clear(); // ТочкиСледования для НавМеш
+        //CarDataList.Clear(); // Информация о всех машинах 
     }
 
 
