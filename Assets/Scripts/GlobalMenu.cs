@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 
 public class GlobalMenu : MonoBehaviour
 {
-
+   
     public GameObject MainCamera;
     public GameObject UDPCLIENT;
     public GameObject MainMenu;
@@ -134,6 +134,7 @@ public class GlobalMenu : MonoBehaviour
     }
     public void EnterToMenu()
     {
+        
         EnterButton.SetActive(false);
         MainMenu.SetActive(true);
         Menu.SetActive(true);
@@ -150,6 +151,7 @@ public class GlobalMenu : MonoBehaviour
     }
     public void EnterToUDPSettingsMenu()
     {
+        
 
         MainMenu.SetActive(false);
         CarSettings.SetActive(false);
@@ -475,7 +477,6 @@ public class GlobalMenu : MonoBehaviour
     {
         if (ChangeValues)
         {
-
             foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
             {
                 foreach (WheelCollider w in Car.GetComponent<WayPointCar>().WColForward)
@@ -500,6 +501,40 @@ public class GlobalMenu : MonoBehaviour
             AsymptoteValueText.text = (AsymptoteValueSlider.value).ToString();
         }
 
+    }
+
+    public void SliderChange() //EventSystem.current.currentSelectedGameObject.GetComponentInChildren<Text>().text; 
+        //Проверка слайдера
+        //Изменение значения текста
+        //Привязка текстов к слайдерам через блок канваса
+        //
+    {
+
+        if(ChangeValues)
+        {
+            foreach (GameObject Car in UDPCLIENT.GetComponent<UDPClient1>().CarList)
+            {
+                foreach (WheelCollider w in Car.GetComponent<WayPointCar>().WColForward)
+                {
+                    if (SideForward)
+                    {
+                        WheelFrictionCurve wheelFriction = new WheelFrictionCurve();
+                        wheelFriction = w.sidewaysFriction;
+                        wheelFriction.asymptoteValue = AsymptoteValueSlider.value;
+                        w.sidewaysFriction = wheelFriction;
+                    }
+                    else
+                    {
+
+                        WheelFrictionCurve wheelFriction = new WheelFrictionCurve();
+                        wheelFriction = w.forwardFriction;
+                        wheelFriction.asymptoteValue = AsymptoteValueSlider.value;
+                        w.forwardFriction = wheelFriction;
+                    }
+                }
+            }
+            AsymptoteValueText.text = (AsymptoteValueSlider.value).ToString();
+        }
     }
     public void ChangeSideAndForward()
     {
