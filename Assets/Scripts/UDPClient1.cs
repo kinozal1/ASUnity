@@ -287,6 +287,12 @@ public class UDPClient1 : MonoBehaviour
             receiveThread = null;
         }
         Debug.Log("UDPClient: exit");
+        if(client != null)
+        {
+            client.Close();
+        }
+        
+        
     }
 
     public void RealCoords(float unityCof, float RealCofFor, ref float RealOX, ref float RealOY, ref float RealOZ)
@@ -363,8 +369,6 @@ public class UDPClient1 : MonoBehaviour
         }
         else
         {
-            
-           
             receiveThread.Abort();
             ClearData();
            

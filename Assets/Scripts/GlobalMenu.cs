@@ -89,24 +89,30 @@ public class GlobalMenu : MonoBehaviour
 
     private void Awake()
     {
+
         workWithPoints = UDPCLIENT.GetComponent<UDPClient1>().workWithPoints;
         Points = UDPCLIENT.GetComponent<UDPClient1>().Points;
     }
     void Start()
     {
+       
         workWithPoints = UDPCLIENT.GetComponent<UDPClient1>().workWithPoints;
+       
         Points = UDPCLIENT.GetComponent<UDPClient1>().Points;
+        
         if (!Directory.Exists("LogsForData"))
         {
             Directory.CreateDirectory("LogsForData");
         }
+        OnOffPoints();
+        OnOffPoints();
     }
 
 
     // Update is called once per frame
     void Update()
     {
-
+      
         if (StartDataWrite)
         {
 
@@ -164,12 +170,13 @@ public class GlobalMenu : MonoBehaviour
         MainMenu.SetActive(false);
         CarSettings.SetActive(false);
         UDPSettings.SetActive(true);
-
-        //ListenPortField.text = UDPclient.portListen.ToString();
-        //SendPortField.text = UDPclient.portSend.ToString();
-        //IPField.text = UDPclient.ipSend.ToString();
-        //TestStringField.text = UDPclient.TEST.ToString();
-        //DistanceField.text = UDPclient.RealCof.ToString();
+        ChangeValues = false;
+        ListenPortField.text = UDPCLIENT.GetComponent<UDPClient1>().portListen.ToString();
+        SendPortField.text = UDPCLIENT.GetComponent<UDPClient1>().portSend.ToString();
+        IPField.text = UDPCLIENT.GetComponent<UDPClient1>().ipSend.ToString();
+        TestStringField.text = UDPCLIENT.GetComponent<UDPClient1>().StringFromGlobalMenu.ToString();
+        DistanceField.text = UDPCLIENT.GetComponent<UDPClient1>().RealCof.ToString();
+        ChangeValues = true;
     }
     public void ExitFromUDPSettingsMenu()
     {
@@ -248,40 +255,49 @@ public class GlobalMenu : MonoBehaviour
     }
     public void ListenPortChange(string s)
     {
-        UDPCLIENT.GetComponent<UDPClient1>().portListen = Convert.ToInt32(s);
-        
+        if (ChangeValues)
+        {
+            UDPCLIENT.GetComponent<UDPClient1>().portListen = Convert.ToInt32(s);
+        }
     }
     public void SendPortChange(string s)
     {
-        UDPCLIENT.GetComponent<UDPClient1>().portSend = Convert.ToInt32(s);
-     
+        if (ChangeValues)
+        {
+            UDPCLIENT.GetComponent<UDPClient1>().portSend = Convert.ToInt32(s);
+        }
     }
     public void IPChange(string s)
     {
-        UDPCLIENT.GetComponent<UDPClient1>().portSend = Convert.ToInt32(s);
-        
+        if (ChangeValues)
+        {
+            UDPCLIENT.GetComponent<UDPClient1>().portSend = Convert.ToInt32(s);
+        }
     }
     public void TestStringChange(string s)
     {
-        if (UseTestString)
+        if (ChangeValues)
         {
-            UDPCLIENT.GetComponent<UDPClient1>().UseTestString = true;
-            UDPCLIENT.GetComponent<UDPClient1>().StringFromGlobalMenu = (s);
-        }
-        else
-        {
-            UDPCLIENT.GetComponent<UDPClient1>().UseTestString = false;
+            if (UseTestString)
+            {
+                UDPCLIENT.GetComponent<UDPClient1>().UseTestString = true;
+                UDPCLIENT.GetComponent<UDPClient1>().StringFromGlobalMenu = (s);
+            }
+            else
+            {
+                UDPCLIENT.GetComponent<UDPClient1>().UseTestString = false;
+            }
         }
        
        
     }
     public void DistanceChange(string s)
     {
-        UDPCLIENT.GetComponent<UDPClient1>().RealCof = Convert.ToInt32(s);
-      
+        if (ChangeValues)
+        {
+            UDPCLIENT.GetComponent<UDPClient1>().RealCof = Convert.ToInt32(s);
+        }
     }
-
-
     public void MotorTorqueChange()
     {
         if (ChangeValues)
@@ -660,25 +676,28 @@ public class GlobalMenu : MonoBehaviour
             {
                 indexforfile++;
             }
+           
             pathToWrite = string.Format("LogsForData/Log{0}.txt", indexforfile);
             if (pathToWrite!=null)
             {
-                SW = new StreamWriter(pathToWrite, true);
+
+                SW = File.CreateText(pathToWrite);
                 UDPCLIENT.GetComponent<UDPClient1>().StartUseTextData = false;
                 UDPCLIENT.GetComponent<UDPClient1>().StartWriteTextData = true;
                 DataWriter.text = "Запись";
                 DataReader.text = "Импорт";
             }
-            else
-            {
-                StartDataWrite = !StartDataWrite;
-            }
+            //else
+            //{
+            //    StartDataWrite = !StartDataWrite;
+            //}
             
         }
         else
         {
             SW.Flush();
-            SW.Close();
+            
+          
 
             UDPCLIENT.GetComponent<UDPClient1>().StartUseTextData = false;
             UDPCLIENT.GetComponent<UDPClient1>().StartWriteTextData = false;
