@@ -9,7 +9,6 @@ public class InfoMenuController : MonoBehaviour
     public GameObject JustTruck;
 
     public GameObject CurrentCar;
-    public GameObject Point;
     public GameObject Menu;
 
 
@@ -17,27 +16,25 @@ public class InfoMenuController : MonoBehaviour
     public GameObject[] Types;
 
 
-    public string CurrentCarName;
+
     public float OX, OY, OZ;
-    public float RPM,AngleOfLifter;
+
 
     public GameObject CurrentCamera;
     public GameObject NextCamera;
 
-    public bool Kostil = true;
+    public bool TypesChanger = true;
     public Text TextBar1;
     public Text TextBar2;
     public Text TextBar3;
     public Text TextBar4;
     public Text TextBar5;
     public Text TextBar6;
-    public Text TextBar7;
-    public Text TextBar8;
-    public Text TextBar9;
+
     // Start is called before the first frame update
     public void OnEnable()
     {
-        Kostil = true;
+        TypesChanger = true;
         Menu.SetActive(false);
     }
     public void OnDisable()
@@ -58,27 +55,28 @@ public class InfoMenuController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-       if (Kostil)
+       if (TypesChanger)
         {
             for (int i=0; i<Types.Length;i++)
             {
                 Types[i].SetActive(false);
             }
             Types[TypeOfCar].SetActive(true);
-            Kostil = false;
+            TypesChanger = false;
         }
 
+
         Random rd = new Random();
-        OX = CurrentCar.transform.position.x;
-        OY = CurrentCar.transform.position.y;
-        OZ = CurrentCar.transform.position.z;
+        OX = Event_Manager.Instance.CurrentCar.Position.position.x;
+        OY = Event_Manager.Instance.CurrentCar.Position.position.y;
+        OZ = Event_Manager.Instance.CurrentCar.Position.position.z;
         TextBar1.text = "Тестовая машина";
-        TextBar2.text=OX.ToString("f2");
-        TextBar3.text = OY.ToString("f2");
-        TextBar4.text = OZ.ToString("f2");
-        TextBar5.text = AngleOfLifter.ToString("f2");
-        TextBar6.text = RPM.ToString("f2");
-       
+        TextBar2.text= Event_Manager.Instance.CurrentCar.Data[0].ToString("f2");
+        TextBar3.text = Event_Manager.Instance.CurrentCar.Data[1].ToString("f2");
+        TextBar4.text = Event_Manager.Instance.CurrentCar.Data[2].ToString("f2");
+        TextBar5.text = Event_Manager.Instance.CurrentCar.Data[3].ToString("f2");
+        TextBar6.text = Event_Manager.Instance.CurrentCar.Data[4].ToString("f2");
+
 
     }
   public void WhenClicked()

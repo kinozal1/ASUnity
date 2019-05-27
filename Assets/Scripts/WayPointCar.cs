@@ -5,6 +5,11 @@ using UnityEngine.AI;
 
 public class WayPointCar : MonoBehaviour
 {
+
+    public int Car_ID;
+    public float[] Data = new float[8];
+    public string Name;
+
     public GameObject Anchor;
     public GameObject CurrentWaypoint;
     public int exceptionAction = 0;
@@ -126,7 +131,7 @@ public class WayPointCar : MonoBehaviour
 
     void FixedUpdate()
     {
-
+        
         
         float accel = 0;
         float steer = 0;
@@ -184,10 +189,8 @@ public class WayPointCar : MonoBehaviour
 
                 w.wheelTransform.localRotation = Quaternion.Euler(w.rotation, w.col.steerAngle, 0.0f); //21
 
-            if (GameObject.Find("InfoMenu") != null)
-            {
-                GameObject.Find("InfoMenu").GetComponent<InfoMenuController>().RPM = w.col.rpm;
-            }
+            Event_Manager.Instance.CurrentCar.Data[0] = w.col.rpm;
+            
         }
 
     }
@@ -278,13 +281,17 @@ public class WayPointCar : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
-
         NextCamera.SetActive(true);
         CurrentCamera.SetActive(false);
 
+        Event_Manager.Instance.CurrentCar.Position = transform;
+        Event_Manager.Instance.CurrentCar.Car_id = Car_ID;
+        Event_Manager.Instance.CurrentCar.Data = Data;
+        Event_Manager.Instance.CurrentCar.Name = Name;
 
-        GameObject.Find("InfoMenu").GetComponent<InfoMenuController>().CurrentCar = gameObject;
-        GameObject.Find("InfoMenu").GetComponent<InfoMenuController>().CurrentCarName = gameObject.name;
+        //Нужно выбросить :(
+       // GameObject.Find("InfoMenu").GetComponent<InfoMenuController>().CurrentCar = gameObject;
+       // GameObject.Find("InfoMenu").GetComponent<InfoMenuController>().CurrentCarName = gameObject.name;
 
 
 
