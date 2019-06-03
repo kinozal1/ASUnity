@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class WayPointCar : MonoBehaviour
 {
-
     public int Car_ID;
     public float[] Data = new float[8];
     public string Name;
@@ -14,10 +13,12 @@ public class WayPointCar : MonoBehaviour
     public GameObject CurrentWaypoint;
     public int exceptionAction = 0;
     public NavMeshAgent agent;
+
     public GameObject CurrentCamera;
     public GameObject NextCamera;
-    public bool Back7;
-    public bool TriggerForOptionToMove;
+
+    public bool MovingBack;
+    public bool MovingByUser;
 
     public GameObject CarCamera,Shaft;
 
@@ -144,13 +145,13 @@ public class WayPointCar : MonoBehaviour
         CheckAngle(CurrentWaypoint, Shaft, Axis, ref MiddleAngle, ref Lenght);
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (TriggerForOptionToMove)
+            if (MovingByUser)
             {
-                TriggerForOptionToMove = false;
+                MovingByUser = false;
             }
             else
             {
-                TriggerForOptionToMove = true;
+                MovingByUser = true;
             }
         }
         CheckLidar();
@@ -209,11 +210,11 @@ public class WayPointCar : MonoBehaviour
         }
         if (MiddleAngle >= 90 || MiddleAngle <=-90)
         {
-            Back7 = true;
+            MovingBack = true;
         }
         else 
         {
-            Back7 = false;
+            MovingBack = false;
         }
 
 
@@ -231,7 +232,7 @@ public class WayPointCar : MonoBehaviour
    
         foreach (WheelCollider col in WColForward)
         {
-            if (Back7)
+            if (MovingBack)
             {
 
                 col.steerAngle = Mathf.MoveTowardsAngle(col.steerAngle, 0, 1f);
@@ -540,7 +541,7 @@ public class WayPointCar : MonoBehaviour
         OY.y = 0;
         MiddleAngle = Vector3.SignedAngle(OY, directionToTarget, Axis);
     }
-
+    
     private void MovingByPoints()
     {
         for (int i = 0; i < Points.transform.childCount; i++)
@@ -559,7 +560,7 @@ public class WayPointCar : MonoBehaviour
             }
         }
     }
-        
+    
 
 
 
